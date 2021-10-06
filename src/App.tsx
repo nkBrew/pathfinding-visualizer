@@ -1,14 +1,12 @@
 import React from 'react';
 import './App.css';
+import PathfindingVisualizer from './PathfindingVisualizer/PathfindingVisualizer';
 
 function App(): JSX.Element {
   return (
     <div className="App">
-      <header className="App-header">
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-      </header>
+      {/* <header className="App-header"></header> */}
+      <PathfindingVisualizer />
     </div>
   );
 }

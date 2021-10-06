@@ -1,0 +1,21 @@
+.node {
+  display: inline-block;
+  background-color:whitesmoke;
+  width:50px;
+  height: inherit;
+  border: 2px solid rgb(0, 0, 0);
+  margin:0;
+  vertical-align: top;
+  position:relative;
+}
+
+.node-wall {
+  background-color: rgb(28, 26, 26);
+}
+
+.node-finder {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: inherit;
+}
