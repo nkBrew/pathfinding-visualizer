@@ -13,7 +13,7 @@
   background-color: rgb(28, 26, 26);
 }
 
-.node-finder {
+.node-center-align {
   display: flex;
   justify-content: center;
   align-items: center;
