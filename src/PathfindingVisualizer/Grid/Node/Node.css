@@ -13,6 +13,10 @@
   background-color: rgb(28, 26, 26);
 }
 
+.node-visited {
+  background-color: blue;
+}
+
 .node-center-align {
   display: flex;
   justify-content: center;

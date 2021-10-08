@@ -8,6 +8,8 @@ export type NodeType = {
   isWall: boolean;
   isFinder: boolean;
   isTarget: boolean;
+  isVisited: boolean;
+  isPath: boolean;
   icon?: string;
 };
 
@@ -24,6 +26,8 @@ const Node = ({
   isWall,
   isFinder,
   isTarget,
+  isPath,
+  isVisited,
   mouseHoverHandler,
   mouseDownHandler,
   mouseUpHandler,
@@ -37,7 +41,7 @@ const Node = ({
 
   return (
     <div
-      className={classNames('node', { 'node-wall': isWall })}
+      className={classNames('node', { 'node-wall': isWall, 'node-visited': isVisited, 'node-path': isPath })}
       onMouseOver={() => mouseHoverHandler(col, row)}
       onMouseDown={() => mouseDownHandler(col, row)}
       onMouseUp={() => mouseUpHandler(col, row)}
@@ -47,4 +51,4 @@ const Node = ({
   );
 };
 
-export default Node;
+export default React.memo(Node);

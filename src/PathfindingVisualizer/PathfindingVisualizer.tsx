@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { aStar, AStarNode } from '../Algorithms/algorithms';
 import Grid from './Grid/Grid';
 import Node, { NodeType } from './Grid/Node/Node';
 import './PathfindingVisualizer.css';
@@ -30,7 +31,15 @@ const PathfindingVisualizer = (): JSX.Element => {
       for (let c = 0; c < numCol; c++) {
         const isFinder = finderStartCol == c && finderStartRow == r;
         const isTarget = targetStartCol == c && targetStartRow == r;
-        const node: NodeType = { col: c, row: r, isWall: false, isFinder: isFinder, isTarget: isTarget };
+        const node: NodeType = {
+          col: c,
+          row: r,
+          isWall: false,
+          isFinder: isFinder,
+          isTarget: isTarget,
+          isPath: false,
+          isVisited: false,
+        };
         nodes.push(node);
       }
       nodeRows.push(nodes);
@@ -109,15 +118,39 @@ const PathfindingVisualizer = (): JSX.Element => {
             isTarget={n.isTarget}
             mouseDownHandler={mouseDownHandler}
             mouseUpHandler={mouseUpHandler}
+            isPath={n.isPath}
+            isVisited={n.isVisited}
           />
         ))}
       </div>
     ));
   };
 
+  const calculate = () => {
+    console.log('calculating');
+    const aStarReturn = aStar({ col: target.col, row: target.row }, { col: finder.col, row: finder.row }, nodes, 10);
+    const { closedList, shortestPath } = { ...aStarReturn };
+    if (closedList) {
+      visualize(closedList);
+    }
+    console.log(aStar({ col: target.col, row: target.row }, { col: finder.col, row: finder.row }, nodes, 10));
+  };
+  const visualize = (closedList: AStarNode[]) => {
+    for (let i = 0; i < closedList.length; i++) {
+      setTimeout(() => {
+        const newNodes = [...nodes];
+        const closed = closedList[i];
+        const updatedNode = { ...nodes[closed.row][closed.col], isVisited: true };
+        newNodes[updatedNode.row][updatedNode.col] = updatedNode;
+        setNodes(newNodes);
+      }, 5 * i);
+    }
+  };
+
   return (
     <div className="PathfindingVisualizer">
       <Grid>{renderNodes()}</Grid>
+      <button onClick={() => calculate()}>Click me</button>
     </div>
   );
 };
