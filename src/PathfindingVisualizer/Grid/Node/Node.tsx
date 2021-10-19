@@ -11,10 +11,11 @@ export type NodeType = {
   isVisited: boolean;
   isPath: boolean;
   icon?: string;
+  color?: string;
 };
 
 export type NodeProps = {
-  mouseHoverHandler: (col: number, row: number) => void;
+  mouseEnterHandler: (col: number, row: number) => void;
   mouseUpHandler: (col: number, row: number) => void;
   mouseDownHandler: (col: number, row: number) => void;
 } & NodeType;
@@ -28,7 +29,8 @@ const Node = ({
   isTarget,
   isPath,
   isVisited,
-  mouseHoverHandler,
+  color,
+  mouseEnterHandler: mouseEnterHandler,
   mouseDownHandler,
   mouseUpHandler,
 }: NodeProps): JSX.Element => {
@@ -39,14 +41,29 @@ const Node = ({
     logo = '😡';
   }
 
+  const styles: { backgroundColor?: string } = {};
+  if (color && !isWall) {
+    styles['backgroundColor'] = color;
+  }
   return (
     <div
-      className={classNames('node', { 'node-wall': isWall, 'node-visited': isVisited, 'node-path': isPath })}
-      onMouseOver={() => mouseHoverHandler(col, row)}
+      className="node"
+      onMouseEnter={() => mouseEnterHandler(col, row)}
       onMouseDown={() => mouseDownHandler(col, row)}
       onMouseUp={() => mouseUpHandler(col, row)}
     >
-      {logo ? <div className="node-center-align"> {logo}</div> : null}
+      <div className="node-center-align">
+        <div
+          className={classNames('node-center-align', {
+            'node-wall': isWall,
+            'node-visited': isVisited,
+            'node-path': isPath,
+          })}
+          style={styles}
+        >
+          {logo ? <div className="node-center-align node-finder"> {logo}</div> : null}
+        </div>
+      </div>
     </div>
   );
 };

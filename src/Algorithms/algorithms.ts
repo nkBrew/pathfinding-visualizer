@@ -25,7 +25,13 @@ const equals = (node1: ColRow, node2: ColRow): boolean => {
   return node1.row == node2.row && node1.col == node2.col;
 };
 
-export const aStar = (goal: ColRow, start: ColRow, grid: NodeType[][], length: number): AStarReturnObject | null => {
+export const aStar = (
+  goal: ColRow,
+  start: ColRow,
+  grid: NodeType[][],
+  nCol: number,
+  nRow: number,
+): AStarReturnObject | null => {
   const open = [];
   const closed = [];
 
@@ -49,8 +55,8 @@ export const aStar = (goal: ColRow, start: ColRow, grid: NodeType[][], length: n
     if (equals(currentNode, goalNode)) {
       //GoalNodeFound
       const traceBack = [];
-      let traceNode = currentNode;
-      while (traceNode.parent != null) {
+      let traceNode: AStarNode | null = currentNode;
+      while (traceNode != null) {
         traceBack.push(traceNode);
         traceNode = traceNode.parent;
       }
@@ -71,11 +77,7 @@ export const aStar = (goal: ColRow, start: ColRow, grid: NodeType[][], length: n
     //Check if within bounds and walkable
     const validChildrenPositions = childrenPositions.filter(
       (child) =>
-        child.row < length &&
-        child.row >= 0 &&
-        child.col < length &&
-        child.col >= 0 &&
-        !grid[child.row][child.col].isWall,
+        child.row < nRow && child.row >= 0 && child.col < nCol && child.col >= 0 && !grid[child.row][child.col].isWall,
     );
     for (const child of validChildrenPositions) {
       let onClosed = false;

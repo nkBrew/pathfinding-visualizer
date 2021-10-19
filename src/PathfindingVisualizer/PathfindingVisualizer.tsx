@@ -4,6 +4,9 @@ import Grid from './Grid/Grid';
 import Node, { NodeType } from './Grid/Node/Node';
 import './PathfindingVisualizer.css';
 
+const numCol = 20;
+const numRow = 10;
+
 const PathfindingVisualizer = (): JSX.Element => {
   const [mouseDown, setMouseDown] = useState(false);
   const [nodes, setNodes] = useState<NodeType[][]>([[]]);
@@ -13,10 +16,9 @@ const PathfindingVisualizer = (): JSX.Element => {
 
   useEffect(() => {
     const nodeRows = [];
-    const numCol = 10;
+
     const w = window.innerWidth;
     console.log(w);
-    const numRow = 10;
 
     const finderStartCol = (numCol / 3) >> 0;
     const finderStartRow = (numRow / 2) >> 0;
@@ -67,7 +69,7 @@ const PathfindingVisualizer = (): JSX.Element => {
     console.log('setMouseUp');
   };
 
-  const mouseHoverHandler = (col: number, row: number) => {
+  const mouseEnterHandler = (col: number, row: number) => {
     const n = nodes[row][col];
     if (!n.isWall) {
       const newNodes = [...nodes];
@@ -98,7 +100,7 @@ const PathfindingVisualizer = (): JSX.Element => {
       console.log('mouseHoveringWhileMouseDown col:' + col + ' row:' + row);
       const newNodes = [...nodes];
       const nodeToChange = { ...newNodes[row][col] };
-      const updatedNode = { ...nodeToChange, isWall: !nodeToChange.isWall };
+      const updatedNode = { ...nodeToChange, isWall: !nodeToChange.isWall, isVisited: false, isPath: false };
       newNodes[row][col] = updatedNode;
       setNodes(newNodes);
     }
@@ -112,7 +114,7 @@ const PathfindingVisualizer = (): JSX.Element => {
             key={'node-' + n.col + -n.row}
             col={n.col}
             row={n.row}
-            mouseHoverHandler={mouseHoverHandler}
+            mouseEnterHandler={mouseEnterHandler}
             isWall={n.isWall}
             isFinder={n.isFinder}
             isTarget={n.isTarget}
@@ -120,6 +122,7 @@ const PathfindingVisualizer = (): JSX.Element => {
             mouseUpHandler={mouseUpHandler}
             isPath={n.isPath}
             isVisited={n.isVisited}
+            color={n.color}
           />
         ))}
       </div>
@@ -128,22 +131,53 @@ const PathfindingVisualizer = (): JSX.Element => {
 
   const calculate = () => {
     console.log('calculating');
-    const aStarReturn = aStar({ col: target.col, row: target.row }, { col: finder.col, row: finder.row }, nodes, 10);
+    const aStarReturn = aStar(
+      { col: target.col, row: target.row },
+      { col: finder.col, row: finder.row },
+      nodes,
+      numCol,
+      numRow,
+    );
     const { closedList, shortestPath } = { ...aStarReturn };
     if (closedList) {
       visualize(closedList);
     }
-    console.log(aStar({ col: target.col, row: target.row }, { col: finder.col, row: finder.row }, nodes, 10));
+    if (shortestPath) {
+      visualizeShortestPath(shortestPath);
+    }
   };
+
   const visualize = (closedList: AStarNode[]) => {
     for (let i = 0; i < closedList.length; i++) {
       setTimeout(() => {
         const newNodes = [...nodes];
         const closed = closedList[i];
-        const updatedNode = { ...nodes[closed.row][closed.col], isVisited: true };
+        console.log(closed.gcost);
+        const g = 255 - closed.gcost * 30;
+        const b = 100 + 50 * closed.gcost;
+        const rgb = 'rgb(0,' + g + ',' + b + ')';
+        const updatedNode = { ...nodes[closed.row][closed.col], isVisited: true, color: rgb };
         newNodes[updatedNode.row][updatedNode.col] = updatedNode;
         setNodes(newNodes);
-      }, 5 * i);
+      }, 300 * i);
+    }
+  };
+
+  const visualizeShortestPath = (shortestPath: AStarNode[]) => {
+    const reversePath = shortestPath.reverse();
+    for (let i = 0; i < reversePath.length; i++) {
+      setTimeout(() => {
+        const newNodes = [...nodes];
+        const closed = reversePath[i];
+        console.log(closed.gcost);
+        const r = 250;
+        const g = 250;
+        const b = 0;
+        const rgb = 'rgb(' + r + ',' + g + ',' + b + ')';
+        const updatedNode = { ...nodes[closed.row][closed.col], isPath: true, color: rgb };
+        newNodes[updatedNode.row][updatedNode.col] = updatedNode;
+        setNodes(newNodes);
+      }, 300 * shortestPath.length + 300 * i);
     }
   };
 

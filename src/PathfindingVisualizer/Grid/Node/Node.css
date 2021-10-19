@@ -11,10 +11,24 @@
 
 .node-wall {
   background-color: rgb(28, 26, 26);
+  animation-name: wall-ani;
+  animation-duration: 1s;
+  animation-fill-mode: forwards;
+  border:hidden;
+  border-radius: 8px;
+  z-index: 1;
 }
 
 .node-visited {
-  background-color: blue;
+  /* background-color: blue; */
+  animation-name: visited-ani;
+  animation-duration:1.5s;
+  animation-fill-mode:forwards;
+}
+
+.node-path {
+  width:100%;
+  height: 100%;
 }
 
 .node-center-align {
@@ -22,4 +36,38 @@
   justify-content: center;
   align-items: center;
   height: inherit;
+}
+
+
+@keyframes wall-ani {
+  0% {
+    width: 0%;
+    height: 0%;
+  }
+  80% {
+    width: 120%;
+    height: 120%;
+  }
+  100% {
+    width: 110%;
+    height: 100%;
+  }
+}
+
+@keyframes visited-ani {
+  0%{
+    width:0%;
+    height:0%;
+    /* transform: rotate(20deg); */
+  }
+  80% {
+    width: 110%;
+    height: 110%;
+    /* transform: rotate(-20deg); */
+  }
+  100% {
+    width: 100%;
+    height: 100%;
+    /* transform: rotate(0deg); */
+  }
 }
