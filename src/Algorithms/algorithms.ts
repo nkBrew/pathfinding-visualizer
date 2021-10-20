@@ -68,10 +68,10 @@ export const aStar = (
       { col: currentNode.col - 1, row: currentNode.row },
       { col: currentNode.col, row: currentNode.row + 1 },
       { col: currentNode.col, row: currentNode.row - 1 },
-      { col: currentNode.col + 1, row: currentNode.row + 1 },
-      { col: currentNode.col + 1, row: currentNode.row - 1 },
-      { col: currentNode.col - 1, row: currentNode.row + 1 },
-      { col: currentNode.col - 1, row: currentNode.row - 1 },
+      // { col: currentNode.col + 1, row: currentNode.row + 1 },
+      // { col: currentNode.col + 1, row: currentNode.row - 1 },
+      // { col: currentNode.col - 1, row: currentNode.row + 1 },
+      // { col: currentNode.col - 1, row: currentNode.row - 1 },
     ];
 
     //Check if within bounds and walkable

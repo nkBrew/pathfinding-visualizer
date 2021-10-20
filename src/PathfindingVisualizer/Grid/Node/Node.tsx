@@ -15,6 +15,7 @@ export type NodeType = {
 };
 
 export type NodeProps = {
+  pathOnScreen: boolean;
   mouseEnterHandler: (col: number, row: number) => void;
   mouseUpHandler: (col: number, row: number) => void;
   mouseDownHandler: (col: number, row: number) => void;
@@ -30,7 +31,8 @@ const Node = ({
   isPath,
   isVisited,
   color,
-  mouseEnterHandler: mouseEnterHandler,
+  pathOnScreen,
+  mouseEnterHandler,
   mouseDownHandler,
   mouseUpHandler,
 }: NodeProps): JSX.Element => {
@@ -56,8 +58,9 @@ const Node = ({
         <div
           className={classNames('node-center-align', {
             'node-wall': isWall,
-            'node-visited': isVisited,
-            'node-path': isPath,
+            'node-visited': isVisited && !pathOnScreen,
+            'node-visited-no-ani': pathOnScreen,
+            'node-path': isPath && !pathOnScreen,
           })}
           style={styles}
         >

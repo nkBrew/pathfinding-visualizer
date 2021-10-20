@@ -7,7 +7,7 @@ import './PathfindingVisualizer.css';
 
 const numCol = 20;
 const numRow = 10;
-const visualizationTimeConstant = 150;
+const visualizationTimeConstant = 100;
 
 const PathfindingVisualizer = (): JSX.Element => {
   const [mouseDown, setMouseDown] = useState(false);
@@ -16,6 +16,7 @@ const PathfindingVisualizer = (): JSX.Element => {
   const [finder, setFinder] = useState({ col: 0, row: 0 });
   const [target, setTarget] = useState({ col: 0, row: 0 });
   const [visualizing, setVisualizing] = useState(false);
+  const [pathOnScreen, setPathOnScreen] = useState(false);
 
   useEffect(() => {
     const nodeRows = [];
@@ -55,7 +56,7 @@ const PathfindingVisualizer = (): JSX.Element => {
     setTarget({ col: targetStartCol, row: targetStartRow });
   }, []);
 
-  const clear = (clearWalls: boolean, clearPath: boolean) => {
+  const clear = (clearWalls: boolean, clearPath: boolean, resetPathOnScreen: boolean) => {
     const newNodes = [...nodes];
     for (let row = 0; row < numRow; row++) {
       for (let col = 0; col < numCol; col++) {
@@ -73,6 +74,9 @@ const PathfindingVisualizer = (): JSX.Element => {
       }
     }
     setNodes(newNodes);
+    if (resetPathOnScreen) {
+      setPathOnScreen(false);
+    }
   };
 
   const mouseDownHandler = (col: number, row: number) => {
@@ -105,6 +109,10 @@ const PathfindingVisualizer = (): JSX.Element => {
           newNodes[row][col] = newFinder;
           setNodes(nodes);
           setFinder({ col: col, row: row });
+          if (pathOnScreen) {
+            clear(false, true, false);
+            calculate(row, col, target.row, target.col, false);
+          }
           break;
         case 'target':
           const oldTarget = { ...nodes[target.row][target.col], isTarget: false };
@@ -114,6 +122,10 @@ const PathfindingVisualizer = (): JSX.Element => {
           newNodes[row][col] = newTarget;
           setNodes(nodes);
           setTarget({ col: col, row: row });
+          if (pathOnScreen) {
+            clear(false, true, false);
+            calculate(finder.row, finder.col, row, col, false);
+          }
           break;
         default:
           break;
@@ -146,54 +158,90 @@ const PathfindingVisualizer = (): JSX.Element => {
             isPath={n.isPath}
             isVisited={n.isVisited}
             color={n.color}
+            pathOnScreen={pathOnScreen}
           />
         ))}
       </div>
     ));
   };
 
-  const calculate = () => {
-    console.log('calculating');
-    const aStarReturn = aStar(
-      { col: target.col, row: target.row },
-      { col: finder.col, row: finder.row },
+  const calculateByVisualizeButton = () => {
+    clear(false, true, true);
+    calculate(finder.row, finder.col, target.row, target.col, true);
+  };
+
+  const calculate = (finderRow: number, finderCol: number, targetRow: number, targetCol: number, timeout: boolean) => {
+    const calculationReturn = aStar(
+      { col: targetCol, row: targetRow },
+      { col: finderCol, row: finderRow },
       nodes,
       numCol,
       numRow,
     );
-    const { closedList, shortestPath } = { ...aStarReturn };
+    const { closedList, shortestPath } = { ...calculationReturn };
     setVisualizing(true);
     if (closedList) {
-      visualize(closedList);
+      visualize(closedList, timeout);
       if (shortestPath) {
-        visualizeShortestPath(closedList.length, shortestPath);
+        visualizeShortestPath(closedList.length, shortestPath, timeout);
       } else {
-        setVisualizing(false);
+        setVisualizing(timeout);
       }
     }
   };
 
-  const visualize = (closedList: AStarNode[]) => {
-    for (let i = 0; i < closedList.length; i++) {
-      setTimeout(() => {
-        const newNodes = [...nodes];
+  const visualize = (closedList: AStarNode[], timeout: boolean) => {
+    if (timeout) {
+      for (let i = 0; i < closedList.length; i++) {
+        setTimeout(() => {
+          const newNodes = [...nodes];
+          const closed = closedList[i];
+          const g = 255 - closed.gcost * 30;
+          const b = 100 + 50 * closed.gcost;
+          const rgb = 'rgb(0,' + g + ',' + b + ')';
+          const updatedNode = { ...nodes[closed.row][closed.col], isVisited: true, color: rgb };
+          newNodes[updatedNode.row][updatedNode.col] = updatedNode;
+          setNodes(newNodes);
+        }, visualizationTimeConstant * i);
+      }
+    } else {
+      const newNodes = [...nodes];
+      for (let i = 0; i < closedList.length; i++) {
         const closed = closedList[i];
-        console.log(closed.gcost);
         const g = 255 - closed.gcost * 30;
         const b = 100 + 50 * closed.gcost;
         const rgb = 'rgb(0,' + g + ',' + b + ')';
         const updatedNode = { ...nodes[closed.row][closed.col], isVisited: true, color: rgb };
         newNodes[updatedNode.row][updatedNode.col] = updatedNode;
-        setNodes(newNodes);
-      }, visualizationTimeConstant * i);
+      }
+      setNodes(newNodes);
     }
   };
 
-  const visualizeShortestPath = (visitedNodesLength: number, shortestPath: AStarNode[]) => {
+  const visualizeShortestPath = (visitedNodesLength: number, shortestPath: AStarNode[], timeout: boolean) => {
     const reversePath = shortestPath.reverse();
-    for (let i = 0; i < reversePath.length; i++) {
-      setTimeout(() => {
-        const newNodes = [...nodes];
+    if (timeout) {
+      for (let i = 0; i < reversePath.length; i++) {
+        setTimeout(() => {
+          const newNodes = [...nodes];
+          const closed = reversePath[i];
+          console.log(closed.gcost);
+          const r = 250;
+          const g = 250;
+          const b = 0;
+          const rgb = 'rgb(' + r + ',' + g + ',' + b + ')';
+          const updatedNode = { ...nodes[closed.row][closed.col], isPath: true, color: rgb };
+          newNodes[updatedNode.row][updatedNode.col] = updatedNode;
+          setNodes(newNodes);
+          if (i == reversePath.length - 1) {
+            setVisualizing(false);
+            setPathOnScreen(true);
+          }
+        }, visualizationTimeConstant * visitedNodesLength + visualizationTimeConstant * i);
+      }
+    } else {
+      const newNodes = [...nodes];
+      for (let i = 0; i < reversePath.length; i++) {
         const closed = reversePath[i];
         console.log(closed.gcost);
         const r = 250;
@@ -202,17 +250,16 @@ const PathfindingVisualizer = (): JSX.Element => {
         const rgb = 'rgb(' + r + ',' + g + ',' + b + ')';
         const updatedNode = { ...nodes[closed.row][closed.col], isPath: true, color: rgb };
         newNodes[updatedNode.row][updatedNode.col] = updatedNode;
-        setNodes(newNodes);
-        if (i == reversePath.length - 1) {
-          setVisualizing(false);
-        }
-      }, visualizationTimeConstant * visitedNodesLength + visualizationTimeConstant * i);
+      }
+      setNodes(newNodes);
+      setVisualizing(false);
+      setPathOnScreen(true);
     }
   };
 
   return (
     <div>
-      <Header visualizing={visualizing} onVisualize={calculate} onClear={clear} />
+      <Header visualizing={visualizing} onVisualize={calculateByVisualizeButton} onClear={clear} />
       <div className="PathfindingVisualizer">
         <Grid>{renderNodes()}</Grid>
       </div>

@@ -5,7 +5,7 @@ import classNames from 'classnames';
 type HeaderProps = {
   visualizing: boolean;
   onVisualize: () => void;
-  onClear: (clearWalls: boolean, clearPath: boolean) => void;
+  onClear: (clearWalls: boolean, clearPath: boolean, resetPathOnScreen: boolean) => void;
 };
 
 const Header = ({ visualizing, onVisualize, onClear }: HeaderProps): JSX.Element => {
@@ -20,13 +20,13 @@ const Header = ({ visualizing, onVisualize, onClear }: HeaderProps): JSX.Element
           >
             Visualize!
           </div>
-          <div className="header-button" onClick={() => onClear(true, true)}>
+          <div className="header-button" onClick={() => onClear(true, true, true)}>
             Clear Board
           </div>
-          <div className="header-button" onClick={() => onClear(true, false)}>
+          <div className="header-button" onClick={() => onClear(true, false, false)}>
             Clear Walls
           </div>
-          <div className="header-button" onClick={() => onClear(false, true)}>
+          <div className="header-button" onClick={() => onClear(false, true, true)}>
             Clear Path
           </div>
         </div>

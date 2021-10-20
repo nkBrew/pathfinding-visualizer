@@ -19,10 +19,14 @@
 }
 
 .node-visited {
-  /* background-color: blue; */
   animation-name: visited-ani;
   animation-duration:1.5s;
   animation-fill-mode:forwards;
+}
+
+.node-visited-no-ani {
+  width:100%;
+  height:100%;
 }
 
 .node-path {
