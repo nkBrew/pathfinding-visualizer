@@ -1,11 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { aStar, AStarNode } from '../Algorithms/algorithms';
+import Header from '../Header/Header';
 import Grid from './Grid/Grid';
 import Node, { NodeType } from './Grid/Node/Node';
 import './PathfindingVisualizer.css';
 
 const numCol = 20;
 const numRow = 10;
+const visualizationTimeConstant = 150;
 
 const PathfindingVisualizer = (): JSX.Element => {
   const [mouseDown, setMouseDown] = useState(false);
@@ -13,6 +15,7 @@ const PathfindingVisualizer = (): JSX.Element => {
   const [moving, setMoving] = useState('');
   const [finder, setFinder] = useState({ col: 0, row: 0 });
   const [target, setTarget] = useState({ col: 0, row: 0 });
+  const [visualizing, setVisualizing] = useState(false);
 
   useEffect(() => {
     const nodeRows = [];
@@ -51,6 +54,26 @@ const PathfindingVisualizer = (): JSX.Element => {
     setFinder({ col: finderStartCol, row: finderStartRow });
     setTarget({ col: targetStartCol, row: targetStartRow });
   }, []);
+
+  const clear = (clearWalls: boolean, clearPath: boolean) => {
+    const newNodes = [...nodes];
+    for (let row = 0; row < numRow; row++) {
+      for (let col = 0; col < numCol; col++) {
+        const node = { ...nodes[row][col] };
+        if (clearWalls) {
+          node.isWall = false;
+        }
+        if (clearPath) {
+          node.isPath = false;
+          node.isVisited = false;
+          node.color = undefined;
+        }
+
+        newNodes[row][col] = node;
+      }
+    }
+    setNodes(newNodes);
+  };
 
   const mouseDownHandler = (col: number, row: number) => {
     setMouseDown(true);
@@ -139,11 +162,14 @@ const PathfindingVisualizer = (): JSX.Element => {
       numRow,
     );
     const { closedList, shortestPath } = { ...aStarReturn };
+    setVisualizing(true);
     if (closedList) {
       visualize(closedList);
-    }
-    if (shortestPath) {
-      visualizeShortestPath(shortestPath);
+      if (shortestPath) {
+        visualizeShortestPath(closedList.length, shortestPath);
+      } else {
+        setVisualizing(false);
+      }
     }
   };
 
@@ -159,11 +185,11 @@ const PathfindingVisualizer = (): JSX.Element => {
         const updatedNode = { ...nodes[closed.row][closed.col], isVisited: true, color: rgb };
         newNodes[updatedNode.row][updatedNode.col] = updatedNode;
         setNodes(newNodes);
-      }, 300 * i);
+      }, visualizationTimeConstant * i);
     }
   };
 
-  const visualizeShortestPath = (shortestPath: AStarNode[]) => {
+  const visualizeShortestPath = (visitedNodesLength: number, shortestPath: AStarNode[]) => {
     const reversePath = shortestPath.reverse();
     for (let i = 0; i < reversePath.length; i++) {
       setTimeout(() => {
@@ -177,14 +203,19 @@ const PathfindingVisualizer = (): JSX.Element => {
         const updatedNode = { ...nodes[closed.row][closed.col], isPath: true, color: rgb };
         newNodes[updatedNode.row][updatedNode.col] = updatedNode;
         setNodes(newNodes);
-      }, 300 * shortestPath.length + 300 * i);
+        if (i == reversePath.length - 1) {
+          setVisualizing(false);
+        }
+      }, visualizationTimeConstant * visitedNodesLength + visualizationTimeConstant * i);
     }
   };
 
   return (
-    <div className="PathfindingVisualizer">
-      <Grid>{renderNodes()}</Grid>
-      <button onClick={() => calculate()}>Click me</button>
+    <div>
+      <Header visualizing={visualizing} onVisualize={calculate} onClear={clear} />
+      <div className="PathfindingVisualizer">
+        <Grid>{renderNodes()}</Grid>
+      </div>
     </div>
   );
 };
