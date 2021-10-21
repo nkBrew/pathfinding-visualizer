@@ -178,7 +178,7 @@ const PathfindingVisualizer = (): JSX.Element => {
       numCol,
       numRow,
     );
-    const { closedList, shortestPath } = { ...calculationReturn };
+    const { exploredNodes: closedList, shortestPath } = { ...calculationReturn };
     setVisualizing(true);
     if (closedList) {
       visualize(closedList, timeout);

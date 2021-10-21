@@ -13,9 +13,15 @@ export type AStarNode = {
 } & ColRow;
 
 type AStarReturnObject = {
-  closedList: AStarNode[];
+  exploredNodes: AStarNode[];
   shortestPath: AStarNode[];
 };
+
+export type DijkstraNode = {
+  dist: number;
+  previous: DijkstraNode | null;
+  explored: boolean;
+} & ColRow;
 
 const hCost = (target: ColRow, current: ColRow): number => {
   return (current.row - target.row) ** 2 + (current.col - target.col) ** 2;
@@ -60,7 +66,7 @@ export const aStar = (
         traceBack.push(traceNode);
         traceNode = traceNode.parent;
       }
-      return { closedList: closed, shortestPath: traceBack };
+      return { exploredNodes: closed, shortestPath: traceBack };
     }
 
     const childrenPositions = [
@@ -109,4 +115,65 @@ export const aStar = (
     }
   }
   return null;
+};
+
+const map2dTo1d = (row: number, col: number, nCol: number): number => {
+  return row * nCol + col;
+};
+
+const dijkstra = (start: ColRow, goal: ColRow, numRow: number, grid: NodeType[][], numCol: number) => {
+  const unexplored: DijkstraNode[] = [];
+  for (let row = 0; row < numRow; row++) {
+    for (let col = 0; row < numCol; row++) {
+      const v: DijkstraNode = { dist: Infinity, previous: null, row: row, col: col, explored: false };
+      if (v.row == start.row && v.col == start.col) {
+        v.dist = 0;
+      }
+      unexplored.push(v);
+    }
+  }
+
+  const explored: DijkstraNode[] = [];
+
+  while (unexplored.some((node) => !node.explored)) {
+    let currentNode = unexplored[0];
+    unexplored.forEach((node) => {
+      if (node.dist < currentNode.dist) {
+        currentNode = node;
+      }
+    });
+    currentNode.explored = true;
+    explored.push(currentNode);
+
+    if (equals(currentNode, goal)) {
+      const traceback = [];
+      let tracenode: DijkstraNode | null = currentNode;
+      while (tracenode != null) {
+        traceback.push(tracenode);
+        tracenode = tracenode.previous;
+      }
+      return traceback;
+    }
+
+    const prospectivePositions = [
+      { col: currentNode.col + 1, row: currentNode.row },
+      { col: currentNode.col - 1, row: currentNode.row },
+      { col: currentNode.col, row: currentNode.row + 1 },
+      { col: currentNode.col, row: currentNode.row - 1 },
+    ];
+    const validNearbyPositions = prospectivePositions.filter(
+      (pos) => pos.col >= 0 && pos.col < numCol && pos.row >= 0 && pos.col < numCol && !grid[pos.row][pos.col].isWall,
+    );
+
+    validNearbyPositions.forEach((pos) => {
+      const node = unexplored[map2dTo1d(pos.row, pos.col, numCol)];
+      const newDistance = currentNode.dist + 1;
+      if (newDistance < node.dist) {
+        node.dist = newDistance;
+        node.previous = currentNode;
+      }
+    });
+  }
+
+  return;
 };
