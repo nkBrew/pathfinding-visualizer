@@ -64,8 +64,8 @@ const Node = ({
           className={classNames('node-center-align', {
             'node-wall': isWall,
             'node-visited': isVisited && !pathOnScreen,
-            'node-visited-no-ani': pathOnScreen,
-            'node-path': isPath && !pathOnScreen,
+            'node-visited-no-ani': isVisited && pathOnScreen,
+            'node-path': isPath,
           })}
           style={styles}
         >
