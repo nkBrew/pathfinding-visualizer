@@ -2,7 +2,7 @@ import React from 'react';
 import './Node.css';
 import classNames from 'classnames';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faBone, faDog } from '@fortawesome/free-solid-svg-icons';
+import { faBone, faCat, faDog, faFish } from '@fortawesome/free-solid-svg-icons';
 
 export type NodeType = {
   col: number;
@@ -70,8 +70,8 @@ const Node = ({
           style={styles}
         >
           {/* {logo ? <div className="node-center-align node-finder"> {logo}</div> : null} */}
-          {isFinder && <FontAwesomeIcon icon={faDog} size="2x" color={finderColor} />}
-          {isTarget && <FontAwesomeIcon icon={faBone} size="lg" transform={{ rotate: 20 }} color={targetColor} />}
+          {isFinder && <FontAwesomeIcon icon={faCat} size="2x" color={finderColor} />}
+          {isTarget && <FontAwesomeIcon icon={faFish} size="lg" transform={{ rotate: 20 }} color={targetColor} />}
         </div>
       </div>
     </div>

@@ -14,15 +14,12 @@ const Header = ({ visualizing, onVisualize, onClear }: HeaderProps): JSX.Element
       <div className="header-inner">
         <div className="header-wrapper">
           <div className="title">Pathfinding Visualizer</div>
-          <div
-            className={classNames('visualize-button', { 'visualize-loading': visualizing })}
-            onClick={() => onVisualize()}
-          >
+          <button className={classNames('visualize-button')} onClick={() => onVisualize()} disabled={visualizing}>
             Visualize!
-          </div>
-          <div className="header-button" onClick={() => onClear(true, true, true)}>
+          </button>
+          <a href="#" className="header-button" onClick={() => onClear(true, true, true)}>
             Clear Board
-          </div>
+          </a>
           <div className="header-button" onClick={() => onClear(true, false, false)}>
             Clear Walls
           </div>
