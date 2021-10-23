@@ -1,112 +1,41 @@
 import { NodeType } from '../PathfindingVisualizer/Grid/Node/Node';
+import { aStar } from './aStar';
+import { dijkstra } from './dijkstra';
 
-type ColRow = {
+export type ColRow = {
   col: number;
   row: number;
 };
 
-export type AStarNode = {
-  parent: AStarNode | null;
-  fcost: number;
-  gcost: number;
-  hcost: number;
-} & ColRow;
-
-type AStarReturnObject = {
-  closedList: AStarNode[];
-  shortestPath: AStarNode[];
+export type AlgorithmResult = {
+  exploredList: ColRow[];
+  shortestPath: ColRow[];
 };
 
-const hCost = (target: ColRow, current: ColRow): number => {
-  return (current.row - target.row) ** 2 + (current.col - target.col) ** 2;
-};
+export enum ALGORITHM {
+  ASTAR = 'ASTAR',
+  DIJKSTRA = 'DIJKSTRA',
+}
 
-const equals = (node1: ColRow, node2: ColRow): boolean => {
+export const equals = (node1: ColRow, node2: ColRow): boolean => {
   return node1.row == node2.row && node1.col == node2.col;
 };
 
-export const aStar = (
-  goal: ColRow,
+export const calculateByAlgorithm = (
+  algorithm: ALGORITHM,
   start: ColRow,
+  goal: ColRow,
   grid: NodeType[][],
-  nCol: number,
   nRow: number,
-): AStarReturnObject | null => {
-  const open = [];
-  const closed = [];
+  nCol: number,
+): ColRow[][] => {
+  switch (algorithm) {
+    case ALGORITHM.DIJKSTRA:
+      return dijkstra(start, goal, grid, nRow, nCol);
 
-  const startNode: AStarNode = { ...start, parent: null, fcost: 0, gcost: 0, hcost: 0 };
-  const goalNode: AStarNode = { ...goal, parent: null, fcost: 0, gcost: 0, hcost: 0 };
-
-  open.push(startNode);
-
-  while (open.length > 0) {
-    let currentNode = open[0];
-    let currentIndex = open.indexOf(currentNode);
-    open.forEach((node, i) => {
-      if (node.fcost < currentNode.fcost) {
-        currentNode = node;
-        currentIndex = i;
-      }
-    });
-    open.splice(currentIndex, 1);
-    closed.push(currentNode);
-
-    if (equals(currentNode, goalNode)) {
-      //GoalNodeFound
-      const traceBack = [];
-      let traceNode: AStarNode | null = currentNode;
-      while (traceNode != null) {
-        traceBack.push(traceNode);
-        traceNode = traceNode.parent;
-      }
-      return { closedList: closed, shortestPath: traceBack };
-    }
-
-    const childrenPositions = [
-      { col: currentNode.col + 1, row: currentNode.row },
-      { col: currentNode.col - 1, row: currentNode.row },
-      { col: currentNode.col, row: currentNode.row + 1 },
-      { col: currentNode.col, row: currentNode.row - 1 },
-      // { col: currentNode.col + 1, row: currentNode.row + 1 },
-      // { col: currentNode.col + 1, row: currentNode.row - 1 },
-      // { col: currentNode.col - 1, row: currentNode.row + 1 },
-      // { col: currentNode.col - 1, row: currentNode.row - 1 },
-    ];
-
-    //Check if within bounds and walkable
-    const validChildrenPositions = childrenPositions.filter(
-      (child) =>
-        child.row < nRow && child.row >= 0 && child.col < nCol && child.col >= 0 && !grid[child.row][child.col].isWall,
-    );
-    for (const child of validChildrenPositions) {
-      let onClosed = false;
-      for (const c of closed) {
-        if (equals(c, child)) {
-          onClosed = true;
-          break;
-        }
-      }
-      if (onClosed) {
-        continue;
-      }
-      const gcost = currentNode.gcost + 1;
-      const hcost = hCost(child, goalNode);
-      const fcost = gcost + hcost;
-
-      const childNode: AStarNode = { ...child, parent: currentNode, fcost: fcost, hcost: hcost, gcost: gcost };
-
-      let inOpen = false;
-      for (const o of open) {
-        if (equals(childNode, o) && o.gcost < childNode.gcost) {
-          inOpen = true;
-        }
-      }
-      if (inOpen) {
-        continue;
-      }
-      open.push(childNode);
-    }
+    case ALGORITHM.ASTAR:
+      return aStar(start, goal, grid, nRow, nCol);
+    default:
+      return [];
   }
-  return null;
 };

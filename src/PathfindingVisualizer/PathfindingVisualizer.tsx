@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { aStar, AStarNode } from '../Algorithms/algorithms';
+import { ALGORITHM, calculateByAlgorithm, ColRow } from '../Algorithms/algorithms';
 import Header from '../Header/Header';
 import Grid from './Grid/Grid';
 import Node, { NodeType } from './Grid/Node/Node';
@@ -17,6 +17,7 @@ const PathfindingVisualizer = (): JSX.Element => {
   const [target, setTarget] = useState({ col: 0, row: 0 });
   const [visualizing, setVisualizing] = useState(false);
   const [pathOnScreen, setPathOnScreen] = useState(false);
+  const [algorithm, setAlgorithm] = useState(ALGORITHM.DIJKSTRA);
 
   useEffect(() => {
     const nodeRows = [];
@@ -171,66 +172,58 @@ const PathfindingVisualizer = (): JSX.Element => {
   };
 
   const calculate = (finderRow: number, finderCol: number, targetRow: number, targetCol: number, timeout: boolean) => {
-    const calculationReturn = aStar(
-      { col: targetCol, row: targetRow },
+    const result = calculateByAlgorithm(
+      algorithm,
       { col: finderCol, row: finderRow },
+      { col: targetCol, row: targetRow },
       nodes,
-      numCol,
       numRow,
+      numCol,
     );
-    const { closedList, shortestPath } = { ...calculationReturn };
+
+    const exploredList = result[0];
+    const shortestPath = result[1];
     setVisualizing(true);
-    if (closedList) {
-      visualize(closedList, timeout);
-      if (shortestPath) {
-        visualizeShortestPath(closedList.length, shortestPath, timeout);
+    if (exploredList) {
+      visualize(exploredList, timeout);
+      if (shortestPath.length > 0) {
+        visualizeShortestPath(exploredList.length, shortestPath, timeout);
       } else {
         setVisualizing(timeout);
       }
     }
   };
 
-  const visualize = (closedList: AStarNode[], timeout: boolean) => {
+  const visualize = (exploredList: ColRow[], timeout: boolean) => {
     if (timeout) {
-      for (let i = 0; i < closedList.length; i++) {
+      for (let i = 0; i < exploredList.length; i++) {
         setTimeout(() => {
           const newNodes = [...nodes];
-          const closed = closedList[i];
-          const g = 255 - closed.gcost * 30;
-          const b = 100 + 50 * closed.gcost;
-          const rgb = 'rgb(0,' + g + ',' + b + ')';
-          const updatedNode = { ...nodes[closed.row][closed.col], isVisited: true, color: rgb };
+          const closed = exploredList[i];
+          const updatedNode = { ...nodes[closed.row][closed.col], isVisited: true };
           newNodes[updatedNode.row][updatedNode.col] = updatedNode;
           setNodes(newNodes);
         }, visualizationTimeConstant * i);
       }
     } else {
       const newNodes = [...nodes];
-      for (let i = 0; i < closedList.length; i++) {
-        const closed = closedList[i];
-        const g = 255 - closed.gcost * 30;
-        const b = 100 + 50 * closed.gcost;
-        const rgb = 'rgb(0,' + g + ',' + b + ')';
-        const updatedNode = { ...nodes[closed.row][closed.col], isVisited: true, color: rgb };
+      for (let i = 0; i < exploredList.length; i++) {
+        const closed = exploredList[i];
+        const updatedNode = { ...nodes[closed.row][closed.col], isVisited: true };
         newNodes[updatedNode.row][updatedNode.col] = updatedNode;
       }
       setNodes(newNodes);
     }
   };
 
-  const visualizeShortestPath = (visitedNodesLength: number, shortestPath: AStarNode[], timeout: boolean) => {
+  const visualizeShortestPath = (visitedNodesLength: number, shortestPath: ColRow[], timeout: boolean) => {
     const reversePath = shortestPath.reverse();
     if (timeout) {
       for (let i = 0; i < reversePath.length; i++) {
         setTimeout(() => {
           const newNodes = [...nodes];
           const closed = reversePath[i];
-          console.log(closed.gcost);
-          const r = 250;
-          const g = 250;
-          const b = 0;
-          const rgb = 'rgb(' + r + ',' + g + ',' + b + ')';
-          const updatedNode = { ...nodes[closed.row][closed.col], isPath: true, color: rgb };
+          const updatedNode = { ...nodes[closed.row][closed.col], isPath: true };
           newNodes[updatedNode.row][updatedNode.col] = updatedNode;
           setNodes(newNodes);
           if (i == reversePath.length - 1) {
@@ -243,12 +236,7 @@ const PathfindingVisualizer = (): JSX.Element => {
       const newNodes = [...nodes];
       for (let i = 0; i < reversePath.length; i++) {
         const closed = reversePath[i];
-        console.log(closed.gcost);
-        const r = 250;
-        const g = 250;
-        const b = 0;
-        const rgb = 'rgb(' + r + ',' + g + ',' + b + ')';
-        const updatedNode = { ...nodes[closed.row][closed.col], isPath: true, color: rgb };
+        const updatedNode = { ...nodes[closed.row][closed.col], isPath: true };
         newNodes[updatedNode.row][updatedNode.col] = updatedNode;
       }
       setNodes(newNodes);
