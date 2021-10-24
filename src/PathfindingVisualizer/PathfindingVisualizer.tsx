@@ -189,7 +189,10 @@ const PathfindingVisualizer = (): JSX.Element => {
       if (shortestPath.length > 0) {
         visualizeShortestPath(exploredList.length, shortestPath, timeout);
       } else {
-        setVisualizing(timeout);
+        // setVisualizing(timeout);
+        setTimeout(() => {
+          setVisualizing(false);
+        }, exploredList.length * visualizationTimeConstant);
       }
     }
   };

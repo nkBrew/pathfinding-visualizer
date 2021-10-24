@@ -1,5 +1,5 @@
 import { NodeType } from '../PathfindingVisualizer/Grid/Node/Node';
-import { ColRow, equals } from './algorithms';
+import { ColRow, equals, hCost } from './algorithms';
 
 export type AStarNode = {
   parent: AStarNode | null;
@@ -8,9 +8,6 @@ export type AStarNode = {
   hcost: number;
 } & ColRow;
 
-const hCost = (target: ColRow, current: ColRow): number => {
-  return (current.row - target.row) ** 2 + (current.col - target.col) ** 2;
-};
 export const aStar = (start: ColRow, goal: ColRow, grid: NodeType[][], nRow: number, nCol: number): ColRow[][] => {
   const open = [];
   const closed = [];

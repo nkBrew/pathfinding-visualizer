@@ -1,6 +1,7 @@
 import { NodeType } from '../PathfindingVisualizer/Grid/Node/Node';
 import { aStar } from './aStar';
 import { dijkstra } from './dijkstra';
+import { greedy } from './greedy';
 
 export type ColRow = {
   col: number;
@@ -15,11 +16,13 @@ export type AlgorithmResult = {
 export enum ALGORITHM {
   ASTAR = 'ASTAR',
   DIJKSTRA = 'DIJKSTRA',
+  GREEDY = 'GREEDY',
 }
 
 export const ALGORITHM_FRIENDLY_NAMES = {
   [ALGORITHM.ASTAR]: 'A* Search',
   [ALGORITHM.DIJKSTRA]: 'Dijkstra',
+  [ALGORITHM.GREEDY]: 'Greedy',
 };
 
 export const equals = (node1: ColRow, node2: ColRow): boolean => {
@@ -40,7 +43,13 @@ export const calculateByAlgorithm = (
 
     case ALGORITHM.ASTAR:
       return aStar(start, goal, grid, nRow, nCol);
+    case ALGORITHM.GREEDY:
+      return greedy(start, goal, grid, nRow, nCol);
     default:
       return [];
   }
+};
+
+export const hCost = (target: ColRow, current: ColRow): number => {
+  return (current.row - target.row) ** 2 + (current.col - target.col) ** 2;
 };
