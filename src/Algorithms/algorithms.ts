@@ -17,6 +17,11 @@ export enum ALGORITHM {
   DIJKSTRA = 'DIJKSTRA',
 }
 
+export const ALGORITHM_FRIENDLY_NAMES = {
+  [ALGORITHM.ASTAR]: 'A* Search',
+  [ALGORITHM.DIJKSTRA]: 'Dijkstra',
+};
+
 export const equals = (node1: ColRow, node2: ColRow): boolean => {
   return node1.row == node2.row && node1.col == node2.col;
 };

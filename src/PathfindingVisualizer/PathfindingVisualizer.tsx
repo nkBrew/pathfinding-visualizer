@@ -147,7 +147,7 @@ const PathfindingVisualizer = (): JSX.Element => {
       <div className="grid-row" key={'noderow' + i}>
         {value.map((n) => (
           <Node
-            key={'node-' + n.col + -n.row}
+            key={'node-' + n.row + '-' + n.col}
             col={n.col}
             row={n.row}
             mouseEnterHandler={mouseEnterHandler}
@@ -247,7 +247,13 @@ const PathfindingVisualizer = (): JSX.Element => {
 
   return (
     <div>
-      <Header visualizing={visualizing} onVisualize={calculateByVisualizeButton} onClear={clear} />
+      <Header
+        algorithm={algorithm}
+        visualizing={visualizing}
+        onAlgorithmSelect={setAlgorithm}
+        onVisualize={calculateByVisualizeButton}
+        onClear={clear}
+      />
       <div className="PathfindingVisualizer">
         <Grid>{renderNodes()}</Grid>
       </div>

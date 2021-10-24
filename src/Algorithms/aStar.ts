@@ -11,7 +11,7 @@ export type AStarNode = {
 const hCost = (target: ColRow, current: ColRow): number => {
   return (current.row - target.row) ** 2 + (current.col - target.col) ** 2;
 };
-export const aStar = (goal: ColRow, start: ColRow, grid: NodeType[][], nRow: number, nCol: number): ColRow[][] => {
+export const aStar = (start: ColRow, goal: ColRow, grid: NodeType[][], nRow: number, nCol: number): ColRow[][] => {
   const open = [];
   const closed = [];
 
