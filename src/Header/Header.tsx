@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import './Header.css';
+import './Header.scss';
 import classNames from 'classnames';
 import { ALGORITHM, ALGORITHM_FRIENDLY_NAMES } from '../Algorithms/algorithms';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -29,37 +29,47 @@ const Header = ({ visualizing, algorithm, onAlgorithmSelect, onVisualize, onClea
     <div className="header-main">
       <div className="header-inner">
         <ul className="header-wrapper">
-          <li>
+          <li className="flex-item">
             <div className="title">Pathfinding Visualizer</div>
           </li>
           <li
-            className="header-button"
+            className="header-button flex-item-title"
             onClick={() => setShowAlgorithms(!showAlgorithms)}
             tabIndex={0}
             onBlur={() => setShowAlgorithms(false)}
           >
             <div className="dropdown-container">
-              <div className="dropdown-button">
-                <div className="algorithms-label">Algorithms</div>
-                <FontAwesomeIcon icon={showAlgorithms ? faCaretUp : faCaretDown} />
+              <div
+                className={classNames('dropdown-btn', {
+                  'dropdown-btn-open': showAlgorithms,
+                  'dropdown-btn-hover': !showAlgorithms,
+                })}
+              >
+                <div>
+                  <div className="algorithms-label">
+                    Algorithms <FontAwesomeIcon icon={showAlgorithms ? faCaretUp : faCaretDown} />
+                  </div>
+                </div>
               </div>
               <div className={classNames('dropdown-content', { open: showAlgorithms })}>{renderAlgorithmOptions()}</div>
             </div>
           </li>
-          <li className="header-button">
+          <li className="header-button flex-item">
             <button className={classNames('visualize-button')} onClick={() => onVisualize()} disabled={visualizing}>
               {visualString}
             </button>
           </li>
-          <li className="header-button" onClick={() => onClear(true, true, true)}>
-            <div>Clear Board</div>
-          </li>
-          <li className="header-button" onClick={() => onClear(true, false, false)}>
-            <div>Clear Walls</div>
-          </li>
-          <li className="header-button" onClick={() => onClear(false, true, true)}>
-            <div>Clear Path</div>
-          </li>
+          <ul className="flex-item">
+            <li className="header-button" onClick={() => onClear(true, true, true)}>
+              <div>Clear Board</div>
+            </li>
+            <li className="header-button" onClick={() => onClear(true, false, false)}>
+              <div>Clear Walls</div>
+            </li>
+            <li className="header-button" onClick={() => onClear(false, true, true)}>
+              <div>Clear Path</div>
+            </li>
+          </ul>
         </ul>
       </div>
     </div>

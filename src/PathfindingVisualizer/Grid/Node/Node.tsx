@@ -1,5 +1,5 @@
 import React from 'react';
-import './Node.css';
+import './Node.scss';
 import classNames from 'classnames';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBone, faCat, faDog, faFish } from '@fortawesome/free-solid-svg-icons';
@@ -27,7 +27,6 @@ const finderColor = 'rgb(89, 89, 89)';
 const targetColor = 'rgb(89, 89, 89)';
 
 const Node = ({
-  icon,
   col,
   row,
   isWall,
@@ -35,23 +34,11 @@ const Node = ({
   isTarget,
   isPath,
   isVisited,
-  color,
   pathOnScreen,
   mouseEnterHandler,
   mouseDownHandler,
   mouseUpHandler,
 }: NodeProps): JSX.Element => {
-  let logo = undefined;
-  if (isTarget) {
-    logo = '🐈';
-  } else if (isFinder) {
-    logo = '😡';
-  }
-
-  const styles: { backgroundColor?: string } = {};
-  if (color && !isWall) {
-    styles['backgroundColor'] = color;
-  }
   return (
     <div
       className="node"
@@ -61,18 +48,24 @@ const Node = ({
     >
       <div className="node-center-align">
         <div
-          className={classNames('node-center-align', {
+          className={classNames('', {
             'node-wall': isWall,
-            'node-visited': isVisited && !pathOnScreen,
+            'node-visited': isVisited && !pathOnScreen && !isPath,
             'node-visited-no-ani': isVisited && pathOnScreen,
-            'node-path': isPath,
+            'node-path': isPath && !pathOnScreen,
+            'node-path-no-ani': isPath && pathOnScreen,
           })}
-          style={styles}
-        >
-          {/* {logo ? <div className="node-center-align node-finder"> {logo}</div> : null} */}
-          {isFinder && <FontAwesomeIcon icon={faCat} size="2x" color={finderColor} />}
-          {isTarget && <FontAwesomeIcon icon={faFish} size="lg" transform={{ rotate: 20 }} color={targetColor} />}
-        </div>
+        />
+        {isFinder && (
+          <div className="node-icon">
+            <FontAwesomeIcon icon={faCat} size="lg" color={finderColor} />
+          </div>
+        )}
+        {isTarget && (
+          <div className="node-icon">
+            <FontAwesomeIcon icon={faFish} size="1x" transform={{ rotate: 20 }} color={targetColor} />
+          </div>
+        )}
       </div>
     </div>
   );

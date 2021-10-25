@@ -1,13 +1,13 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { ALGORITHM, calculateByAlgorithm, ColRow } from '../Algorithms/algorithms';
 import Header from '../Header/Header';
 import Grid from './Grid/Grid';
 import Node, { NodeType } from './Grid/Node/Node';
 import './PathfindingVisualizer.css';
-
-const numCol = 20;
-const numRow = 10;
-const visualizationTimeConstant = 100;
+//in px is the size of the node + its border
+const numCol = ((window.innerWidth / 34) * 0.98) >> 0;
+const numRow = ((window.innerHeight / 34) * 0.8) >> 0;
+const visualizationTimeConstant = 200;
 
 const PathfindingVisualizer = (): JSX.Element => {
   const [mouseDown, setMouseDown] = useState(false);
@@ -18,6 +18,8 @@ const PathfindingVisualizer = (): JSX.Element => {
   const [visualizing, setVisualizing] = useState(false);
   const [pathOnScreen, setPathOnScreen] = useState(false);
   const [algorithm, setAlgorithm] = useState(ALGORITHM.DIJKSTRA);
+  const [gridSize, setGridSize] = useState({ width: 0, height: 0 });
+  const gridRef = useRef(null);
 
   useEffect(() => {
     const nodeRows = [];
@@ -229,9 +231,12 @@ const PathfindingVisualizer = (): JSX.Element => {
           const updatedNode = { ...nodes[closed.row][closed.col], isPath: true };
           newNodes[updatedNode.row][updatedNode.col] = updatedNode;
           setNodes(newNodes);
+          //In timeout to let animation play on final node
           if (i == reversePath.length - 1) {
-            setVisualizing(false);
-            setPathOnScreen(true);
+            setTimeout(() => {
+              setVisualizing(false);
+              setPathOnScreen(true);
+            }, 800);
           }
         }, visualizationTimeConstant * visitedNodesLength + visualizationTimeConstant * i);
       }
@@ -258,7 +263,9 @@ const PathfindingVisualizer = (): JSX.Element => {
         onClear={clear}
       />
       <div className="PathfindingVisualizer">
-        <Grid>{renderNodes()}</Grid>
+        <div ref={gridRef}>
+          <Grid>{renderNodes()}</Grid>
+        </div>
       </div>
     </div>
   );
