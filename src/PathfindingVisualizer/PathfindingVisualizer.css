@@ -1,5 +1,6 @@
 .PathfindingVisualizer {
     width:100%;
     height:100%;
-    background-color: dimgray;
+    background-color: rgb(143, 155, 165);
+    padding-top:1vh
 }

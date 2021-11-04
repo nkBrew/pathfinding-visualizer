@@ -1,12 +1,13 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { ALGORITHM, calculateByAlgorithm, ColRow } from '../Algorithms/algorithms';
 import Header from '../Header/Header';
+import Legend from '../Legend/Legend';
 import Grid from './Grid/Grid';
 import Node, { NodeType } from './Grid/Node/Node';
 import './PathfindingVisualizer.css';
 //in px is the size of the node + its border
-const numCol = ((window.innerWidth / 34) * 0.98) >> 0;
-const numRow = ((window.innerHeight / 34) * 0.8) >> 0;
+const numCol = ((window.innerWidth / 34) * 0.93) >> 0;
+const numRow = ((window.innerHeight / 34) * 0.9) >> 0;
 const visualizationTimeConstant = 200;
 
 const PathfindingVisualizer = (): JSX.Element => {
@@ -17,7 +18,7 @@ const PathfindingVisualizer = (): JSX.Element => {
   const [target, setTarget] = useState({ col: 0, row: 0 });
   const [visualizing, setVisualizing] = useState(false);
   const [pathOnScreen, setPathOnScreen] = useState(false);
-  const [algorithm, setAlgorithm] = useState(ALGORITHM.DIJKSTRA);
+  const [algorithm, setAlgorithm] = useState(ALGORITHM.ASTAR);
   const [gridSize, setGridSize] = useState({ width: 0, height: 0 });
   const gridRef = useRef(null);
 
@@ -25,15 +26,12 @@ const PathfindingVisualizer = (): JSX.Element => {
     const nodeRows = [];
 
     const w = window.innerWidth;
-    console.log(w);
 
     const finderStartCol = (numCol / 3) >> 0;
     const finderStartRow = (numRow / 2) >> 0;
 
     const targetStartCol = ((numCol * 2) / 3) >> 0;
     const targetStartRow = finderStartRow;
-
-    console.log('finder row: ' + finderStartRow + ' col: ' + finderStartCol);
 
     for (let r = 0; r < numRow; r++) {
       const nodes: NodeType[] = [];
@@ -90,13 +88,11 @@ const PathfindingVisualizer = (): JSX.Element => {
     } else if (n.isTarget) {
       setMoving('target');
     }
-    console.log('setMouseDown');
   };
 
   const mouseUpHandler = (col: number, row: number) => {
     setMouseDown(false);
     if (moving) setMoving('');
-    console.log('setMouseUp');
   };
 
   const mouseEnterHandler = (col: number, row: number) => {
@@ -135,7 +131,6 @@ const PathfindingVisualizer = (): JSX.Element => {
       }
     }
     if (mouseDown && !moving && !n.isFinder && !n.isTarget) {
-      console.log('mouseHoveringWhileMouseDown col:' + col + ' row:' + row);
       const newNodes = [...nodes];
       const nodeToChange = { ...newNodes[row][col] };
       const updatedNode = { ...nodeToChange, isWall: !nodeToChange.isWall, isVisited: false, isPath: false };
@@ -262,6 +257,7 @@ const PathfindingVisualizer = (): JSX.Element => {
         onVisualize={calculateByVisualizeButton}
         onClear={clear}
       />
+      <Legend />
       <div className="PathfindingVisualizer">
         <div ref={gridRef}>
           <Grid>{renderNodes()}</Grid>
