@@ -15,7 +15,7 @@ $node-visited-animation-duration:1000ms;
   display: inline-block;
   background-color:whitesmoke;
   width:30px;
-  height: inherit;
+  height: 30px;
   border: 2px solid rgb(0, 0, 0);
   margin:0;
   vertical-align: top;
@@ -47,6 +47,8 @@ $node-visited-animation-duration:1000ms;
   background-color: $visited-final-colour;
 }
 
+
+
 .node-path, .node-path-no-ani {
   width:100%;
   height: 100%;
@@ -56,6 +58,12 @@ $node-visited-animation-duration:1000ms;
 .node-path {
   background-color: $path-color;
   animation: path-ani 500ms forwards;
+}
+
+.continuous {
+  animation-fill-mode:none;
+  animation-iteration-count: infinite;
+  animation-duration:1600ms;
 }
 
 .node-center-align {

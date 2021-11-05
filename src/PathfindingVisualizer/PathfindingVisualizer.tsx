@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { ALGORITHM, calculateByAlgorithm, ColRow } from '../Algorithms/algorithms';
 import Header from '../Header/Header';
 import Legend from '../Legend/Legend';
+import Modal from '../Modal/Modal';
 import Grid from './Grid/Grid';
 import Node, { NodeType } from './Grid/Node/Node';
 import './PathfindingVisualizer.css';
@@ -250,6 +251,7 @@ const PathfindingVisualizer = (): JSX.Element => {
 
   return (
     <div>
+      <Modal />
       <Header
         algorithm={algorithm}
         visualizing={visualizing}
