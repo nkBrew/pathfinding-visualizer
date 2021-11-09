@@ -1,6 +1,7 @@
 import React from 'react';
 import { ALGORITHM, ALGORITHM_DESCRIPTIONS, ALGORITHM_FRIENDLY_NAMES } from '../../Algorithms/algorithms';
 import algImg from '../Images/algorithms.png';
+import algorithmAnimation from '../Images/algorithmAnimation.gif';
 
 export type PageContentType = {
   heading: string;
@@ -91,7 +92,11 @@ const Page5: PageContentType = {
 const Page6: PageContentType = {
   heading: 'Visualizing',
   subheading: 'To see the animation of the algorithm, click on the Visualize Button!',
-  body: <div></div>,
+  body: (
+    <div>
+      <img src={algorithmAnimation} />
+    </div>
+  ),
 };
 
 const Page7: PageContentType = {
