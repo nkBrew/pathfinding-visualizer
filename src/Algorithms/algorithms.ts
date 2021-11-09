@@ -1,5 +1,6 @@
 import { NodeType } from '../PathfindingVisualizer/Grid/Node/Node';
 import { aStar } from './aStar';
+import { dfs } from './dfs';
 import { dijkstra } from './dijkstra';
 import { greedy } from './greedy';
 
@@ -17,12 +18,14 @@ export enum ALGORITHM {
   ASTAR = 'ASTAR',
   DIJKSTRA = 'DIJKSTRA',
   GREEDY = 'GREEDY',
+  DFS = 'DFS',
 }
 
 export const ALGORITHM_FRIENDLY_NAMES = {
   [ALGORITHM.ASTAR]: 'A* Search',
   [ALGORITHM.DIJKSTRA]: 'Dijkstra',
   [ALGORITHM.GREEDY]: 'Greedy',
+  [ALGORITHM.DFS]: 'Depth First Search',
 };
 
 export const equals = (node1: ColRow, node2: ColRow): boolean => {
@@ -45,6 +48,8 @@ export const calculateByAlgorithm = (
       return aStar(start, goal, grid, nRow, nCol);
     case ALGORITHM.GREEDY:
       return greedy(start, goal, grid, nRow, nCol);
+    case ALGORITHM.DFS:
+      return dfs(start, goal, grid, nRow, nCol);
     default:
       return [];
   }

@@ -6,8 +6,10 @@ import Grid from './Grid/Grid';
 import Node, { NodeType } from './Grid/Node/Node';
 import './PathfindingVisualizer.css';
 //in px is the size of the node + its border
-const numCol = ((window.innerWidth / 34) * 0.93) >> 0;
-const numRow = ((window.innerHeight / 34) * 0.9) >> 0;
+// const numCol = ((window.innerWidth / 34) * 0.93) >> 0;
+// const numRow = ((window.innerHeight / 34) * 0.9) >> 0;
+const numCol = 4;
+const numRow = 4;
 const visualizationTimeConstant = 200;
 
 const PathfindingVisualizer = (): JSX.Element => {
