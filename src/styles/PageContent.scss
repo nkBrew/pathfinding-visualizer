@@ -1,0 +1,13 @@
+.descriptions-ul {
+  display:inline;
+  list-style-type: disc;
+  text-align: left;
+  margin:20px;
+  > li {
+    padding:5px;
+  }
+}
+
+.descriptions-container {
+  margin:20px;
+}

@@ -14,10 +14,18 @@ export type AlgorithmResult = {
 };
 
 export enum ALGORITHM {
-  ASTAR = 'ASTAR',
   DIJKSTRA = 'DIJKSTRA',
+  ASTAR = 'ASTAR',
   GREEDY = 'GREEDY',
 }
+
+export const ALGORITHM_DESCRIPTIONS = {
+  [ALGORITHM.DIJKSTRA]: '(weighted) the grandfather to most pathfinding algorithms and promises the shortest path',
+  [ALGORITHM.ASTAR]:
+    "(weighted) arguably the best pathfinding algorithms and the most common algoirithms used in video games. It is based on Dijkstra's algorithm with a few modifications allowing it to be much faster while still maintaing the promise of having the shortest path",
+  [ALGORITHM.GREEDY]:
+    '(weighted) this algorithm, while quick, can be used when speed over correctness is the top priority. It does not promise to give you the shortest path, but it does promise to give a path fast',
+};
 
 export const ALGORITHM_FRIENDLY_NAMES = {
   [ALGORITHM.ASTAR]: 'A* Search',

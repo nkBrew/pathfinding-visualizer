@@ -1,12 +1,13 @@
 import React, { useState } from 'react';
 import './Modal.scss';
 import ModalButton from './ModalButton/ModalButton';
-import Page1 from './Pages/Page1';
+import PageContent from './Pages/PageContent';
+import { PagesArray } from './Pages/Pages';
 
-const numPages = 6;
 const Modal = (): JSX.Element => {
   const [open, setOpen] = useState(true);
   const [page, setPage] = useState(1);
+  const pageContent = PagesArray[page - 1];
 
   const closeModal = (e: React.MouseEvent<HTMLDivElement>) => {
     const target = e.target as HTMLDivElement;
@@ -19,17 +20,8 @@ const Modal = (): JSX.Element => {
   };
 
   const setPageHelper = (i: number) => {
-    if ((i > 0 && page < numPages) || (i < 0 && page > 1)) {
+    if ((i > 0 && page < PagesArray.length) || (i < 0 && page > 1)) {
       setPage(page + i);
-    }
-  };
-
-  const renderModalPage = () => {
-    switch (page) {
-      case 1:
-        return <Page1 />;
-      default:
-        return;
     }
   };
 
@@ -37,9 +29,9 @@ const Modal = (): JSX.Element => {
     <div id="modal" className="modal" onClick={closeModal} style={{ display: open ? 'block' : 'none' }}>
       <div id="modal-content" className="modal-content">
         <p className="float-right">
-          {page}/{numPages}
+          {page}/{PagesArray.length}
         </p>
-        {renderModalPage()}
+        <PageContent {...pageContent} />
         <div className="modal-buttons-container">
           <div className="modal-buttons-flexbox">
             <ModalButton label="Previous" onClickHandler={() => setPageHelper(-1)} />
