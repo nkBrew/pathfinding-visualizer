@@ -12,7 +12,6 @@ const addValidNeighboursToStackInOrder = (
   nRow: number,
   nCol: number,
   stack: DFSNode[],
-  grid: NodeType[][],
   dfsGrid: DFSNode[][],
 ) => {
   const defaultNodeDetails = {
@@ -25,7 +24,7 @@ const addValidNeighboursToStackInOrder = (
   //Push Left
   if (
     currentNode.col > 0 &&
-    !grid[currentNode.row][currentNode.col - 1].isWall &&
+    !dfsGrid[currentNode.row][currentNode.col - 1].isWall &&
     !dfsGrid[currentNode.row][currentNode.col - 1].explored
   ) {
     stack.push({ ...defaultNodeDetails, col: currentNode.col - 1 });
@@ -33,7 +32,7 @@ const addValidNeighboursToStackInOrder = (
   //Push Bottom
   if (
     currentNode.row < nRow - 1 &&
-    !grid[currentNode.row + 1][currentNode.col].isWall &&
+    !dfsGrid[currentNode.row + 1][currentNode.col].isWall &&
     !dfsGrid[currentNode.row + 1][currentNode.col].explored
   ) {
     stack.push({ ...defaultNodeDetails, row: currentNode.row + 1 });
@@ -41,7 +40,7 @@ const addValidNeighboursToStackInOrder = (
   //Push Right
   if (
     currentNode.col < nCol - 1 &&
-    !grid[currentNode.row][currentNode.col + 1].isWall &&
+    !dfsGrid[currentNode.row][currentNode.col + 1].isWall &&
     !dfsGrid[currentNode.row][currentNode.col + 1].explored
   ) {
     stack.push({ ...defaultNodeDetails, col: currentNode.col + 1 });
@@ -49,7 +48,7 @@ const addValidNeighboursToStackInOrder = (
   //Push Top
   if (
     currentNode.row > 0 &&
-    !grid[currentNode.row - 1][currentNode.col].isWall &&
+    !dfsGrid[currentNode.row - 1][currentNode.col].isWall &&
     !dfsGrid[currentNode.row - 1][currentNode.col].explored
   ) {
     stack.push({ ...defaultNodeDetails, row: currentNode.row - 1 });
@@ -90,7 +89,7 @@ export const dfs = (start: ColRow, goal: ColRow, grid: NodeType[][], nRow: numbe
       return [visitedNodes, traceback];
     }
 
-    addValidNeighboursToStackInOrder(currentNode, nRow, nCol, stack, grid, dfsGrid);
+    addValidNeighboursToStackInOrder(currentNode, nRow, nCol, stack, dfsGrid);
   }
   return [visitedNodes, []];
 };
