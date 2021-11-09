@@ -83,6 +83,14 @@ const PathfindingVisualizer = (): JSX.Element => {
     }
   };
 
+  const setWall = (col: number, row: number) => {
+    const newNodes = [...nodes];
+    const nodeToChange = { ...newNodes[row][col] };
+    const updatedNode = { ...nodeToChange, isWall: !nodeToChange.isWall, isVisited: false, isPath: false };
+    newNodes[row][col] = updatedNode;
+    setNodes(newNodes);
+  };
+
   const mouseDownHandler = (col: number, row: number) => {
     setMouseDown(true);
     const n = nodes[row][col];
@@ -90,6 +98,8 @@ const PathfindingVisualizer = (): JSX.Element => {
       setMoving('finder');
     } else if (n.isTarget) {
       setMoving('target');
+    } else {
+      setWall(col, row);
     }
   };
 
@@ -134,11 +144,7 @@ const PathfindingVisualizer = (): JSX.Element => {
       }
     }
     if (mouseDown && !moving && !n.isFinder && !n.isTarget) {
-      const newNodes = [...nodes];
-      const nodeToChange = { ...newNodes[row][col] };
-      const updatedNode = { ...nodeToChange, isWall: !nodeToChange.isWall, isVisited: false, isPath: false };
-      newNodes[row][col] = updatedNode;
-      setNodes(newNodes);
+      setWall(col, row);
     }
   };
 
