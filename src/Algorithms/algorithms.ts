@@ -31,6 +31,8 @@ export const ALGORITHM_DESCRIPTIONS = {
     '(weighted) this algorithm, while quick, can be used when speed over correctness is the top priority. It does not promise to give you the shortest path, but it does promise to give a path fast.',
   [ALGORITHM.DFS]:
     '(unweighted) an algorithm used mostly to demonstrate how the other algorithms exceed it. DFS is not suited well for pathfinding as it takes a long time and doe not guarantee the shortest path.',
+  [ALGORITHM.BFS]:
+    '(unweighted) a useful, but limited algorithm. BFS guarantees the shortest path, but is restricted due to being unweighted.',
 };
 
 export const ALGORITHM_FRIENDLY_NAMES = {

@@ -1,5 +1,6 @@
 import React from 'react';
 import { ALGORITHM, ALGORITHM_DESCRIPTIONS, ALGORITHM_FRIENDLY_NAMES } from '../../Algorithms/algorithms';
+import algImg from '../Images/algorithms.png';
 
 export type PageContentType = {
   heading: string;
@@ -50,10 +51,14 @@ const Page3: PageContentType = {
   subheading: 'Like anything in life, not all Pathfinding algorithms are the same.',
   body: (
     <div>
-      Some pathfinding algorithms are weighted while others are unweighted. Weighted algorithms take into consideration
-      the cost of reaching that node, while unweighted only consider the euclidian distance. In addition, some
-      pathfinding algorithms can only promise a path between two points exists, while some promise the optimal shortest
-      path between them.
+      <p>
+        Some pathfinding algorithms are weighted while others are unweighted. Weighted algorithms take into
+        consideration the cost of reaching that node, while unweighted only consider the euclidian distance. In
+        addition, some pathfinding algorithms can only promise a path between two points exists, while some promise the
+        optimal shortest path between them.
+      </p>
+      <p>You can change algorithm used by the Visualizer from the Algorithms dropdown.</p>
+      <img src={algImg} />
     </div>
   ),
 };
