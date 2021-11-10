@@ -1,5 +1,4 @@
 import React from 'react';
-import Node, { NodeType } from './Node/Node';
 import './Grid.scss';
 
 export type GridProps = {

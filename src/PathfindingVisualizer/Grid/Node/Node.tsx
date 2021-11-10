@@ -2,7 +2,7 @@ import React from 'react';
 import './Node.scss';
 import classNames from 'classnames';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faBone, faCat, faDog, faFish, faWeight, faWeightHanging } from '@fortawesome/free-solid-svg-icons';
+import { faCat, faFish, faWeightHanging } from '@fortawesome/free-solid-svg-icons';
 
 export enum NODECLASS {
   WALL = 'WALL',

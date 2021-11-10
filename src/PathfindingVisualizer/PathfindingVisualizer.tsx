@@ -23,14 +23,10 @@ const PathfindingVisualizer = (): JSX.Element => {
   const [pathOnScreen, setPathOnScreen] = useState(false);
   const [algorithm, setAlgorithm] = useState(ALGORITHM.ASTAR);
   const [weightWallToggle, setWeightWallToggle] = useState<NODECLASS.WALL | NODECLASS.WEIGHT>(NODECLASS.WALL);
-  const [gridSize, setGridSize] = useState({ width: 0, height: 0 });
   const gridRef = useRef(null);
 
   useEffect(() => {
     const nodeRows = [];
-
-    const w = window.innerWidth;
-
     const finderStartCol = (numCol / 3) >> 0;
     const finderStartRow = (numRow / 2) >> 0;
 
@@ -116,7 +112,7 @@ const PathfindingVisualizer = (): JSX.Element => {
     }
   };
 
-  const mouseUpHandler = (col: number, row: number) => {
+  const mouseUpHandler = () => {
     setMouseDown(false);
     if (moving) setMoving('');
   };

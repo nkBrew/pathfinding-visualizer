@@ -1,4 +1,4 @@
-import { faCat, faFish } from '@fortawesome/free-solid-svg-icons';
+import { faCat, faFish, faWeightHanging } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React from 'react';
 import './Legend.scss';
@@ -29,7 +29,13 @@ const Legend = (): JSX.Element => {
         </li>
         <li>
           <div>
-            <div>Visited Node</div>
+            <div>Weight</div>
+            <FontAwesomeIcon icon={faWeightHanging} />
+          </div>
+        </li>
+        <li>
+          <div>
+            <div>Visited Node </div>
             <div className="legend-node">
               <div className="legend-node-visited-0" />
             </div>
