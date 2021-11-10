@@ -79,6 +79,7 @@ const PathfindingVisualizer = (): JSX.Element => {
   };
 
   const changeWeightWallToggle = () => {
+    console.log(weightWallToggle);
     if (weightWallToggle == NODECLASS.WEIGHT) {
       setWeightWallToggle(NODECLASS.WALL);
     } else {
@@ -265,6 +266,19 @@ const PathfindingVisualizer = (): JSX.Element => {
       setPathOnScreen(true);
     }
   };
+
+  useEffect(() => {
+    const kdf = ({ key }: { key: string }) => {
+      if (key == 'w') {
+        console.log('hi');
+        changeWeightWallToggle();
+      }
+    };
+    window.addEventListener('keydown', kdf);
+    return () => {
+      window.removeEventListener('keydown', kdf);
+    };
+  }, [weightWallToggle]);
 
   return (
     <div>
