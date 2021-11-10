@@ -5,8 +5,8 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCat, faFish, faWeightHanging } from '@fortawesome/free-solid-svg-icons';
 
 export enum NODECLASS {
-  WALL = 'WALL',
-  WEIGHT = 'WEIGHT',
+  WALL = 'Wall',
+  WEIGHT = 'Weight',
   FINDER = 'FINDER',
   TARGET = 'TARGET',
 }
@@ -72,7 +72,7 @@ const Node = ({
           </div>
         )}
         {nodeClass == NODECLASS.WEIGHT && (
-          <div className="node-icon">
+          <div className="node-icon node-weight">
             <FontAwesomeIcon icon={faWeightHanging} size="1x" color={targetColor} />
           </div>
         )}

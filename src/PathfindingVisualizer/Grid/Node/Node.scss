@@ -78,6 +78,12 @@ $node-visited-animation-duration:1000ms;
   position: absolute;
 }
 
+.node-weight {
+  animation:weight-ani;
+  animation-fill-mode: forwards;
+  animation-duration: 1s;
+}
+
 @keyframes wall-ani {
   0% {
     transform:scale(.2, .2);
@@ -126,4 +132,16 @@ $node-visited-animation-duration:1000ms;
     background-color: darken($path-color, 10%);
   }
 
+}
+
+@keyframes weight-ani {
+  0% {
+    transform: scale(.2, .2);
+  }
+  60% {
+    transform: scale(1.4,1.4);
+  }
+  100% {
+    transform: scale(1,1);
+  }
 }
