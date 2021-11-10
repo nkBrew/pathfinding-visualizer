@@ -15,6 +15,8 @@ export type AlgorithmResult = {
   shortestPath: ColRow[];
 };
 
+export const WEIGHTED_NODE_WEIGHT_CONSTANT = 15;
+
 export enum ALGORITHM {
   DIJKSTRA = 'DIJKSTRA',
   ASTAR = 'ASTAR',

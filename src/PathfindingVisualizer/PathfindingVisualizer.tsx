@@ -4,7 +4,7 @@ import Header from '../Header/Header';
 import Legend from '../Legend/Legend';
 import Modal from '../Modal/Modal';
 import Grid from './Grid/Grid';
-import Node, { NodeType } from './Grid/Node/Node';
+import Node, { NODECLASS, NodeType } from './Grid/Node/Node';
 import './PathfindingVisualizer.css';
 //in px is the size of the node + its border
 // const numCol = ((window.innerWidth / 34) * 0.93) >> 0;
@@ -22,6 +22,7 @@ const PathfindingVisualizer = (): JSX.Element => {
   const [visualizing, setVisualizing] = useState(false);
   const [pathOnScreen, setPathOnScreen] = useState(false);
   const [algorithm, setAlgorithm] = useState(ALGORITHM.ASTAR);
+  const [weightWallToggle, setWeightWallToggle] = useState<NODECLASS.WALL | NODECLASS.WEIGHT>(NODECLASS.WALL);
   const [gridSize, setGridSize] = useState({ width: 0, height: 0 });
   const gridRef = useRef(null);
 
@@ -44,7 +45,6 @@ const PathfindingVisualizer = (): JSX.Element => {
         const node: NodeType = {
           col: c,
           row: r,
-          isWall: false,
           isFinder: isFinder,
           isTarget: isTarget,
           isPath: false,
@@ -66,12 +66,11 @@ const PathfindingVisualizer = (): JSX.Element => {
       for (let col = 0; col < numCol; col++) {
         const node = { ...nodes[row][col] };
         if (clearWalls) {
-          node.isWall = false;
+          node.nodeClass = undefined;
         }
         if (clearPath) {
           node.isPath = false;
           node.isVisited = false;
-          node.color = undefined;
         }
 
         newNodes[row][col] = node;
@@ -83,10 +82,23 @@ const PathfindingVisualizer = (): JSX.Element => {
     }
   };
 
-  const setWall = (col: number, row: number) => {
+  const changeWeightWallToggle = () => {
+    if (weightWallToggle == NODECLASS.WEIGHT) {
+      setWeightWallToggle(NODECLASS.WALL);
+    } else {
+      setWeightWallToggle(NODECLASS.WEIGHT);
+    }
+  };
+
+  const setWeightOrWall = (col: number, row: number) => {
     const newNodes = [...nodes];
     const nodeToChange = { ...newNodes[row][col] };
-    const updatedNode = { ...nodeToChange, isWall: !nodeToChange.isWall, isVisited: false, isPath: false };
+    const updatedNode = {
+      ...nodeToChange,
+      isVisited: false,
+      isPath: false,
+      nodeClass: nodeToChange.nodeClass == weightWallToggle ? undefined : weightWallToggle,
+    };
     newNodes[row][col] = updatedNode;
     setNodes(newNodes);
   };
@@ -99,7 +111,8 @@ const PathfindingVisualizer = (): JSX.Element => {
     } else if (n.isTarget) {
       setMoving('target');
     } else {
-      setWall(col, row);
+      // setWall(col, row);
+      setWeightOrWall(col, row);
     }
   };
 
@@ -110,7 +123,7 @@ const PathfindingVisualizer = (): JSX.Element => {
 
   const mouseEnterHandler = (col: number, row: number) => {
     const n = nodes[row][col];
-    if (!n.isWall) {
+    if (n.nodeClass != NODECLASS.WALL) {
       const newNodes = [...nodes];
       switch (moving) {
         case 'finder':
@@ -144,7 +157,8 @@ const PathfindingVisualizer = (): JSX.Element => {
       }
     }
     if (mouseDown && !moving && !n.isFinder && !n.isTarget) {
-      setWall(col, row);
+      // setWall(col, row);
+      setWeightOrWall(col, row);
     }
   };
 
@@ -157,15 +171,14 @@ const PathfindingVisualizer = (): JSX.Element => {
             col={n.col}
             row={n.row}
             mouseEnterHandler={mouseEnterHandler}
-            isWall={n.isWall}
             isFinder={n.isFinder}
             isTarget={n.isTarget}
             mouseDownHandler={mouseDownHandler}
             mouseUpHandler={mouseUpHandler}
             isPath={n.isPath}
             isVisited={n.isVisited}
-            color={n.color}
             pathOnScreen={pathOnScreen}
+            nodeClass={n.nodeClass}
           />
         ))}
       </div>
@@ -266,6 +279,8 @@ const PathfindingVisualizer = (): JSX.Element => {
         onAlgorithmSelect={setAlgorithm}
         onVisualize={calculateByVisualizeButton}
         onClear={clear}
+        weightWall={weightWallToggle}
+        changeWeightWallToggle={changeWeightWallToggle}
       />
       <Legend />
       <div className="PathfindingVisualizer">

@@ -1,9 +1,9 @@
-import { NodeType } from '../PathfindingVisualizer/Grid/Node/Node';
-import { ColRow, equals, hCost } from './algorithms';
+import { NODECLASS, NodeType } from '../PathfindingVisualizer/Grid/Node/Node';
+import { ColRow, equals, hCost, WEIGHTED_NODE_WEIGHT_CONSTANT } from './algorithms';
 
 type GreedyNode = {
   dist: number;
-  isWall: boolean;
+  nodeClass?: NODECLASS;
   previous: GreedyNode | null;
   explored: boolean;
 } & ColRow;
@@ -17,7 +17,7 @@ const createNodes = (grid: NodeType[][], nRow: number, nCol: number): GreedyNode
         dist: Infinity,
         row: row,
         col: col,
-        isWall: grid[row][col].isWall,
+        nodeClass: grid[row][col].nodeClass,
         previous: null,
         explored: false,
       };
@@ -52,7 +52,7 @@ const getValidNeighbours = (currentNode: GreedyNode, nodes: GreedyNode[][]): Gre
       pos.row >= 0 &&
       pos.col < nCol &&
       pos.col >= 0 &&
-      !nodes[pos.row][pos.col].isWall &&
+      nodes[pos.row][pos.col].nodeClass != NODECLASS.WALL &&
       !nodes[pos.row][pos.col].explored,
   );
 
@@ -93,7 +93,8 @@ export const greedy = (start: ColRow, goal: ColRow, grid: NodeType[][], nRow: nu
     }
     const validNeighbours = getValidNeighbours(currentNode, nodes);
     validNeighbours.forEach((node) => {
-      node.dist = hCost(goal, node);
+      const weight = grid[node.row][node.col].nodeClass == NODECLASS.WEIGHT ? WEIGHTED_NODE_WEIGHT_CONSTANT : 0;
+      node.dist = hCost(goal, node) + weight;
       node.previous = currentNode;
       queue.push(node);
     });

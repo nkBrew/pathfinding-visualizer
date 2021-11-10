@@ -4,16 +4,27 @@ import classNames from 'classnames';
 import { ALGORITHM, ALGORITHM_FRIENDLY_NAMES } from '../Algorithms/algorithms';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCaretDown, faCaretUp } from '@fortawesome/free-solid-svg-icons';
+import { NODECLASS } from '../PathfindingVisualizer/Grid/Node/Node';
 
 type HeaderProps = {
   visualizing: boolean;
   algorithm: ALGORITHM;
+  weightWall: NODECLASS.WEIGHT | NODECLASS.WALL;
   onAlgorithmSelect: (algorithm: ALGORITHM) => void;
+  changeWeightWallToggle: () => void;
   onVisualize: () => void;
   onClear: (clearWalls: boolean, clearPath: boolean, resetPathOnScreen: boolean) => void;
 };
 
-const Header = ({ visualizing, algorithm, onAlgorithmSelect, onVisualize, onClear }: HeaderProps): JSX.Element => {
+const Header = ({
+  visualizing,
+  algorithm,
+  weightWall,
+  onAlgorithmSelect,
+  changeWeightWallToggle,
+  onVisualize,
+  onClear,
+}: HeaderProps): JSX.Element => {
   const [showAlgorithms, setShowAlgorithms] = useState(false);
 
   const renderAlgorithmOptions = () => {
@@ -60,6 +71,9 @@ const Header = ({ visualizing, algorithm, onAlgorithmSelect, onVisualize, onClea
             </button>
           </li>
           <ul className="flex-item">
+            <li className="header-button" onClick={() => changeWeightWallToggle()}>
+              <div>Add {weightWall}</div>
+            </li>
             <li className="header-button" onClick={() => onClear(true, true, true)}>
               <div>Clear Board</div>
             </li>

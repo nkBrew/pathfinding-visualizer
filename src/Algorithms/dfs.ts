@@ -1,10 +1,10 @@
-import { NodeType } from '../PathfindingVisualizer/Grid/Node/Node';
+import { NODECLASS, NodeType } from '../PathfindingVisualizer/Grid/Node/Node';
 import { ColRow, equals } from './algorithms';
 
 type DFSNode = {
   explored: boolean;
   parent: DFSNode | null;
-  isWall: boolean;
+  nodeClass?: NODECLASS;
 } & ColRow;
 
 const addValidNeighboursToStackInOrder = (
@@ -16,7 +16,6 @@ const addValidNeighboursToStackInOrder = (
 ) => {
   const defaultNodeDetails = {
     explored: false,
-    isWall: false,
     parent: currentNode,
     col: currentNode.col,
     row: currentNode.row,
@@ -24,7 +23,7 @@ const addValidNeighboursToStackInOrder = (
   //Push Left
   if (
     currentNode.col > 0 &&
-    !dfsGrid[currentNode.row][currentNode.col - 1].isWall &&
+    dfsGrid[currentNode.row][currentNode.col - 1].nodeClass != NODECLASS.WALL &&
     !dfsGrid[currentNode.row][currentNode.col - 1].explored
   ) {
     stack.push({ ...defaultNodeDetails, col: currentNode.col - 1 });
@@ -32,7 +31,7 @@ const addValidNeighboursToStackInOrder = (
   //Push Bottom
   if (
     currentNode.row < nRow - 1 &&
-    !dfsGrid[currentNode.row + 1][currentNode.col].isWall &&
+    dfsGrid[currentNode.row + 1][currentNode.col].nodeClass != NODECLASS.WALL &&
     !dfsGrid[currentNode.row + 1][currentNode.col].explored
   ) {
     stack.push({ ...defaultNodeDetails, row: currentNode.row + 1 });
@@ -40,7 +39,7 @@ const addValidNeighboursToStackInOrder = (
   //Push Right
   if (
     currentNode.col < nCol - 1 &&
-    !dfsGrid[currentNode.row][currentNode.col + 1].isWall &&
+    dfsGrid[currentNode.row][currentNode.col + 1].nodeClass != NODECLASS.WALL &&
     !dfsGrid[currentNode.row][currentNode.col + 1].explored
   ) {
     stack.push({ ...defaultNodeDetails, col: currentNode.col + 1 });
@@ -48,7 +47,7 @@ const addValidNeighboursToStackInOrder = (
   //Push Top
   if (
     currentNode.row > 0 &&
-    !dfsGrid[currentNode.row - 1][currentNode.col].isWall &&
+    dfsGrid[currentNode.row - 1][currentNode.col].nodeClass != NODECLASS.WALL &&
     !dfsGrid[currentNode.row - 1][currentNode.col].explored
   ) {
     stack.push({ ...defaultNodeDetails, row: currentNode.row - 1 });
@@ -57,7 +56,12 @@ const addValidNeighboursToStackInOrder = (
 
 export const dfs = (start: ColRow, goal: ColRow, grid: NodeType[][], nRow: number, nCol: number): ColRow[][] => {
   const stack: DFSNode[] = [];
-  const rootNode: DFSNode = { explored: false, isWall: false, parent: null, ...start };
+  const rootNode: DFSNode = {
+    explored: false,
+    nodeClass: grid[start.row][start.col].nodeClass,
+    parent: null,
+    ...start,
+  };
   stack.push(rootNode);
 
   const visitedNodes: ColRow[] = [];
@@ -65,7 +69,7 @@ export const dfs = (start: ColRow, goal: ColRow, grid: NodeType[][], nRow: numbe
   for (let row = 0; row < nRow; row++) {
     const dfsRow = [];
     for (let col = 0; col < nCol; col++) {
-      dfsRow.push({ row, col, explored: false, parent: null, isWall: grid[row][col].isWall });
+      dfsRow.push({ row, col, explored: false, parent: null, nodeClass: grid[row][col].nodeClass });
     }
     dfsGrid.push(dfsRow);
   }

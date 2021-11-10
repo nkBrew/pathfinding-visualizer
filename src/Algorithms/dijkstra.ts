@@ -1,5 +1,5 @@
-import { NodeType } from '../PathfindingVisualizer/Grid/Node/Node';
-import { ColRow, equals } from './algorithms';
+import { NODECLASS, NodeType } from '../PathfindingVisualizer/Grid/Node/Node';
+import { ColRow, equals, WEIGHTED_NODE_WEIGHT_CONSTANT } from './algorithms';
 
 export type DijkstraNode = {
   dist: number;
@@ -32,7 +32,9 @@ export const dijkstra = (
   const explored: DijkstraNode[] = [];
 
   while (unexplored.some((node) => !node.explored)) {
-    const firstUnexploredNode = unexplored.find((node) => !node.explored && !grid[node.row][node.col].isWall);
+    const firstUnexploredNode = unexplored.find(
+      (node) => !node.explored && grid[node.row][node.col].nodeClass != NODECLASS.WALL,
+    );
 
     //Stops infinite loop
     if (firstUnexploredNode == undefined) {
@@ -72,12 +74,18 @@ export const dijkstra = (
       { col: currentNode.col, row: currentNode.row - 1 },
     ];
     const validNearbyPositions = prospectivePositions.filter(
-      (pos) => pos.col >= 0 && pos.col < numCol && pos.row >= 0 && pos.row < numRow && !grid[pos.row][pos.col].isWall,
+      (pos) =>
+        pos.col >= 0 &&
+        pos.col < numCol &&
+        pos.row >= 0 &&
+        pos.row < numRow &&
+        grid[pos.row][pos.col].nodeClass != NODECLASS.WALL,
     );
 
     validNearbyPositions.forEach((pos) => {
       const node = unexplored[map2dTo1d(pos.row, pos.col, numCol)];
-      const newDistance = currentNode.dist + 1;
+      const weight = grid[pos.row][pos.col].nodeClass == NODECLASS.WEIGHT ? WEIGHTED_NODE_WEIGHT_CONSTANT : 1;
+      const newDistance = currentNode.dist + weight;
       if (newDistance < node.dist) {
         node.dist = newDistance;
         node.previous = currentNode;

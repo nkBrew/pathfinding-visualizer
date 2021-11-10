@@ -1,5 +1,5 @@
-import { NodeType } from '../PathfindingVisualizer/Grid/Node/Node';
-import { ColRow, equals, hCost } from './algorithms';
+import { NODECLASS, NodeType } from '../PathfindingVisualizer/Grid/Node/Node';
+import { ColRow, equals, hCost, WEIGHTED_NODE_WEIGHT_CONSTANT } from './algorithms';
 
 export type AStarNode = {
   parent: AStarNode | null;
@@ -54,7 +54,11 @@ export const aStar = (start: ColRow, goal: ColRow, grid: NodeType[][], nRow: num
     //Check if within bounds and walkable
     const validChildrenPositions = childrenPositions.filter(
       (child) =>
-        child.row < nRow && child.row >= 0 && child.col < nCol && child.col >= 0 && !grid[child.row][child.col].isWall,
+        child.row < nRow &&
+        child.row >= 0 &&
+        child.col < nCol &&
+        child.col >= 0 &&
+        grid[child.row][child.col].nodeClass != NODECLASS.WALL,
     );
     for (const child of validChildrenPositions) {
       let onClosed = false;
@@ -67,7 +71,8 @@ export const aStar = (start: ColRow, goal: ColRow, grid: NodeType[][], nRow: num
       if (onClosed) {
         continue;
       }
-      const gcost = currentNode.gcost + 1;
+      const weight = grid[child.row][child.col].nodeClass == NODECLASS.WEIGHT ? WEIGHTED_NODE_WEIGHT_CONSTANT : 1;
+      const gcost = currentNode.gcost + weight;
       const hcost = hCost(child, goalNode);
       const fcost = gcost + hcost;
 

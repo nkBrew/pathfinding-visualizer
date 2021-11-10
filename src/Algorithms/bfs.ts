@@ -1,10 +1,10 @@
-import { NodeType } from '../PathfindingVisualizer/Grid/Node/Node';
+import { NODECLASS, NodeType } from '../PathfindingVisualizer/Grid/Node/Node';
 import { ColRow, equals } from './algorithms';
 
 type BFSNode = {
   explored: boolean;
   parent: BFSNode | null;
-  isWall: boolean;
+  nodeClass?: NODECLASS;
 } & ColRow;
 
 const addValidNeighboursToQueueInOrder = (
@@ -16,14 +16,13 @@ const addValidNeighboursToQueueInOrder = (
 ) => {
   const defaultNodeDetails = {
     explored: false,
-    isWall: false,
     parent: currentNode,
     col: currentNode.col,
     row: currentNode.row,
   };
   if (
     currentNode.col > 0 &&
-    !bfsGrid[currentNode.row][currentNode.col - 1].isWall &&
+    bfsGrid[currentNode.row][currentNode.col - 1].nodeClass != NODECLASS.WALL &&
     !bfsGrid[currentNode.row][currentNode.col - 1].explored
   ) {
     queue.push({ ...defaultNodeDetails, col: currentNode.col - 1 });
@@ -31,7 +30,7 @@ const addValidNeighboursToQueueInOrder = (
   //Push Bottom
   if (
     currentNode.row < nRow - 1 &&
-    !bfsGrid[currentNode.row + 1][currentNode.col].isWall &&
+    bfsGrid[currentNode.row + 1][currentNode.col].nodeClass != NODECLASS.WALL &&
     !bfsGrid[currentNode.row + 1][currentNode.col].explored
   ) {
     queue.push({ ...defaultNodeDetails, row: currentNode.row + 1 });
@@ -39,7 +38,7 @@ const addValidNeighboursToQueueInOrder = (
   //Push Right
   if (
     currentNode.col < nCol - 1 &&
-    !bfsGrid[currentNode.row][currentNode.col + 1].isWall &&
+    bfsGrid[currentNode.row][currentNode.col + 1].nodeClass != NODECLASS.WALL &&
     !bfsGrid[currentNode.row][currentNode.col + 1].explored
   ) {
     queue.push({ ...defaultNodeDetails, col: currentNode.col + 1 });
@@ -47,7 +46,7 @@ const addValidNeighboursToQueueInOrder = (
   //Push Top
   if (
     currentNode.row > 0 &&
-    !bfsGrid[currentNode.row - 1][currentNode.col].isWall &&
+    bfsGrid[currentNode.row - 1][currentNode.col].nodeClass != NODECLASS.WALL &&
     !bfsGrid[currentNode.row - 1][currentNode.col].explored
   ) {
     queue.push({ ...defaultNodeDetails, row: currentNode.row - 1 });
@@ -56,13 +55,13 @@ const addValidNeighboursToQueueInOrder = (
 
 export const bfs = (start: ColRow, goal: ColRow, grid: NodeType[][], nRow: number, nCol: number): ColRow[][] => {
   const queue: BFSNode[] = [];
-  queue.push({ ...start, explored: false, parent: null, isWall: false });
+  queue.push({ ...start, explored: false, parent: null, nodeClass: grid[start.row][start.col].nodeClass });
   const bfsGrid: BFSNode[][] = [];
 
   for (let row = 0; row < nRow; row++) {
     const bfsRow = [];
     for (let col = 0; col < nCol; col++) {
-      bfsRow.push({ col, row, parent: null, explored: false, isWall: grid[row][col].isWall });
+      bfsRow.push({ col, row, parent: null, explored: false, nodeClass: grid[row][col].nodeClass });
     }
     bfsGrid.push(bfsRow);
   }

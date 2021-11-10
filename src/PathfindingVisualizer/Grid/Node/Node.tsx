@@ -2,18 +2,23 @@ import React from 'react';
 import './Node.scss';
 import classNames from 'classnames';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faBone, faCat, faDog, faFish } from '@fortawesome/free-solid-svg-icons';
+import { faBone, faCat, faDog, faFish, faWeight, faWeightHanging } from '@fortawesome/free-solid-svg-icons';
+
+export enum NODECLASS {
+  WALL = 'WALL',
+  WEIGHT = 'WEIGHT',
+  FINDER = 'FINDER',
+  TARGET = 'TARGET',
+}
 
 export type NodeType = {
   col: number;
   row: number;
-  isWall: boolean;
   isFinder: boolean;
   isTarget: boolean;
   isVisited: boolean;
   isPath: boolean;
-  icon?: string;
-  color?: string;
+  nodeClass?: NODECLASS;
 };
 
 export type NodeProps = {
@@ -29,12 +34,12 @@ const targetColor = 'rgb(89, 89, 89)';
 const Node = ({
   col,
   row,
-  isWall,
   isFinder,
   isTarget,
   isPath,
   isVisited,
   pathOnScreen,
+  nodeClass,
   mouseEnterHandler,
   mouseDownHandler,
   mouseUpHandler,
@@ -49,7 +54,7 @@ const Node = ({
       <div className="node-center-align">
         <div
           className={classNames('', {
-            'node-wall': isWall,
+            'node-wall': nodeClass == NODECLASS.WALL,
             'node-visited': isVisited && !pathOnScreen && !isPath,
             'node-visited-no-ani': isVisited && pathOnScreen,
             'node-path': isPath && !pathOnScreen,
@@ -64,6 +69,11 @@ const Node = ({
         {isTarget && (
           <div className="node-icon">
             <FontAwesomeIcon icon={faFish} size="1x" transform={{ rotate: 20 }} color={targetColor} />
+          </div>
+        )}
+        {nodeClass == NODECLASS.WEIGHT && (
+          <div className="node-icon">
+            <FontAwesomeIcon icon={faWeightHanging} size="1x" color={targetColor} />
           </div>
         )}
       </div>
