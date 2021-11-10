@@ -73,6 +73,10 @@ export const bfs = (start: ColRow, goal: ColRow, grid: NodeType[][], nRow: numbe
       return [visitedNodes, []];
     }
 
+    //Skip to next iteration. Nodes have more than 1 neighbour and sometimes get added to the queue more than once.
+    if (bfsGrid[currentNode.row][currentNode.col].explored) {
+      continue;
+    }
     currentNode.explored = true;
     bfsGrid[currentNode.row][currentNode.col] = { ...currentNode };
     visitedNodes.push({ col: currentNode.col, row: currentNode.row });
