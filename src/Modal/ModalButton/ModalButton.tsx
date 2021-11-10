@@ -6,7 +6,11 @@ type ModalButtonProps = {
 };
 
 const ModalButton = ({ label, onClickHandler }: ModalButtonProps): JSX.Element => {
-  return <button onClick={onClickHandler}>{label}</button>;
+  return (
+    <button className="modal-button" onClick={onClickHandler}>
+      {label}
+    </button>
+  );
 };
 
 export default ModalButton;

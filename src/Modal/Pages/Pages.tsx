@@ -2,6 +2,9 @@ import React from 'react';
 import { ALGORITHM, ALGORITHM_DESCRIPTIONS, ALGORITHM_FRIENDLY_NAMES } from '../../Algorithms/algorithms';
 import algImg from '../Images/algorithms.png';
 import algorithmAnimation from '../Images/algorithmAnimation.gif';
+import wallWeightAnimation from '../Images/wallWeightAnimation.gif';
+import dragFinderTarget from '../Images/dragFinderTarget.gif';
+import toggleWallsWeights from '../Images/toggleWallsWeights.gif';
 
 export type PageContentType = {
   heading: string;
@@ -83,10 +86,19 @@ const Page4: PageContentType = {
 };
 
 const Page5: PageContentType = {
-  heading: 'Adding Walls',
+  heading: 'Adding Walls And Weights',
   subheading:
-    'You can add walls to the visualizer by clicking and dragging on any square in the application to add a wall. Walls are impassable terrain for the algorithm, and when calculating a path they will avoid this terrain.',
-  body: <div></div>,
+    'You can add walls and weights to the visualizer by clicking and dragging on any square in the application to add a wall. ' +
+    'Walls are impassable terrain for the algorithm, and when calculating a path they will avoid this terrain. ' +
+    'Weights are passable terrain, but have a higher cost of passing through that node than an unweighted node.',
+  body: (
+    <div>
+      <p>Click and drag on the visualizer to add a wall or weight</p>
+      <img src={wallWeightAnimation} />
+      <p>{"You can toggle what you're adding by clicking the Add Weight/Wall button"}</p>
+      <img src={toggleWallsWeights} />
+    </div>
+  ),
 };
 
 const Page6: PageContentType = {
@@ -103,7 +115,11 @@ const Page7: PageContentType = {
   heading: 'Moving the Finder and Target',
   subheading:
     'You can move the Finder and the target by clicking and dragging them around the screen. If a path is already on the screen, the new path and visited nodes will be immediately updated.',
-  body: <div></div>,
+  body: (
+    <div>
+      <img src={dragFinderTarget} />
+    </div>
+  ),
 };
 //Pages
 /*

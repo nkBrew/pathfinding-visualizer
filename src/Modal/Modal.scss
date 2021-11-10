@@ -1,3 +1,6 @@
+@import '/src/styles/palette.scss';
+
+
 .modal {
   display: block;
   z-index:1000;
@@ -17,7 +20,7 @@
   padding:20px;
   border:1px solid #888;
   width:80%;
-  height:60%;
+  height:80vh;
   position:relative;
   border-radius: 20px;
 }
@@ -37,12 +40,31 @@
   > * {
     padding:20px 0px;
     margin:10px;
-    // flex-grow: 1;
     flex:1 40%;
-    // width:100%;
   }
 }
 
 .float-right {
   float: right;
 }
+
+.modal-button {
+  background-color: darken($primary, 10%);
+  border:none;
+  border-radius:5px;
+  font-size: 20px;
+  font-weight: bold;
+  color:white;
+  &:hover {
+    background-color: darken($primary, 20%);
+  }
+  &:active {
+    background-color: darken($primary, 5%);
+  }
+}
+
+// img {
+//   width:auto;
+//   height:100%;
+ 
+// }
