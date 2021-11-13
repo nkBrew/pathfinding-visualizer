@@ -18,10 +18,10 @@ jobs:
           node-version: 16
       
       - name: Install Packages
-        run: npm ci
+        run: yarn install
         
       - name: Build   
-        run: npm build
+        run: yarn build
 
 
       - name: Deploy 🚀
