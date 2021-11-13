@@ -13,7 +13,7 @@ export type PageContentType = {
 };
 
 const Page1: PageContentType = {
-  heading: 'Welcome to Pathfinding Visualizer',
+  heading: 'Test Welcome to Pathfinding Visualizer',
   subheading: 'The Pathfinding Visualizer will show you how a pathfinding algorithm works by a visual representation',
   body: (
     <div>
