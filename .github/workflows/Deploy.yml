@@ -1,11 +1,11 @@
-name: Build and Deploy
+name: Deploy
 
 on:
   push:
     branches: [master]
 
 jobs:
-  Build and Deploy:
+  Deploy:
     runs-on: ubuntu-latest
 
     steps:
@@ -17,10 +17,8 @@ jobs:
         with:
           node-version: 16
       
-      - name: Install Packages
+      - name: Install and Build 🔨
         run: yarn install
-        
-      - name: Build   
         run: yarn build
 
 
