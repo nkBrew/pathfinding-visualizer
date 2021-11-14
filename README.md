@@ -3,6 +3,7 @@
 This project is intended to show a visualizing of how pathfinding algorithms work.
 Users can compare each algorithm and follow along with the algorithm so they can have a better understanding. 
 
+The Visualizer can be viewed at: https://nkbrew.github.io/pathfinding-visualizer/
 
 # Algorithms
 Several pathfinding algorithms are implemented including A*star, Dijkstra's, Greedy, Breadth First Search, and Depth First Search.
