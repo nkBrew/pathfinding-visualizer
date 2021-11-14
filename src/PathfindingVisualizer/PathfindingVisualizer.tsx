@@ -202,7 +202,9 @@ const PathfindingVisualizer = (): JSX.Element => {
 
     const exploredList = result[0];
     const shortestPath = result[1];
-    setVisualizing(true);
+    if (!pathOnScreen) {
+      setVisualizing(true);
+    }
     if (exploredList) {
       visualize(exploredList, timeout);
       if (shortestPath.length > 0) {
@@ -211,6 +213,7 @@ const PathfindingVisualizer = (): JSX.Element => {
         // setVisualizing(timeout);
         setTimeout(() => {
           setVisualizing(false);
+          setPathOnScreen(true);
         }, exploredList.length * visualizationTimeConstant);
       }
     }

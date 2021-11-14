@@ -90,5 +90,5 @@ export const aStar = (start: ColRow, goal: ColRow, grid: NodeType[][], nRow: num
       open.push(childNode);
     }
   }
-  return [];
+  return [closed, []];
 };
