@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import './Header.scss';
-import classNames from 'classnames';
 import { ALGORITHM, ALGORITHM_FRIENDLY_NAMES } from '../Algorithms/algorithms';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCaretDown, faCaretUp } from '@fortawesome/free-solid-svg-icons';
 import { NODECLASS } from '../PathfindingVisualizer/Grid/Node/Node';
+import classNames from 'classnames';
 
 type HeaderProps = {
   visualizing: boolean;
@@ -62,25 +62,43 @@ const Header = ({
                   </div>
                 </div>
               </div>
-              <div className={classNames('dropdown-content', { open: showAlgorithms })}>{renderAlgorithmOptions()}</div>
+              <div className={classNames('dropdown-content', { open: showAlgorithms, disabled: visualizing })}>
+                {renderAlgorithmOptions()}
+              </div>
             </div>
           </li>
           <li className="header-button flex-item">
-            <button className={classNames('visualize-button')} onClick={() => onVisualize()} disabled={visualizing}>
+            <button
+              className={classNames('visualize-button', { disabled: visualizing })}
+              onClick={() => onVisualize()}
+              disabled={visualizing}
+            >
               {visualString}
             </button>
           </li>
           <ul className="flex-item">
-            <li className="header-button" onClick={() => changeWeightWallToggle()}>
+            <li
+              className={classNames('header-button', { disabled: visualizing })}
+              onClick={() => changeWeightWallToggle()}
+            >
               <div>Add {weightWall}</div>
             </li>
-            <li className="header-button" onClick={() => onClear(true, true, true)}>
+            <li
+              className={classNames('header-button', { disabled: visualizing })}
+              onClick={() => onClear(true, true, true)}
+            >
               <div>Clear Board</div>
             </li>
-            <li className="header-button" onClick={() => onClear(true, false, false)}>
+            <li
+              className={classNames('header-button', { disabled: visualizing })}
+              onClick={() => onClear(true, false, false)}
+            >
               <div>Clear Walls</div>
             </li>
-            <li className="header-button" onClick={() => onClear(false, true, true)}>
+            <li
+              className={classNames('header-button', { disabled: visualizing })}
+              onClick={() => onClear(false, true, true)}
+            >
               <div>Clear Path</div>
             </li>
           </ul>

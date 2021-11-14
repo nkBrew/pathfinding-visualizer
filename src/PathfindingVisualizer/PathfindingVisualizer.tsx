@@ -57,6 +57,9 @@ const PathfindingVisualizer = (): JSX.Element => {
   }, []);
 
   const clear = (clearWalls: boolean, clearPath: boolean, resetPathOnScreen: boolean) => {
+    if (visualizing) {
+      return;
+    }
     const newNodes = [...nodes];
     for (let row = 0; row < numRow; row++) {
       for (let col = 0; col < numCol; col++) {
@@ -267,6 +270,12 @@ const PathfindingVisualizer = (): JSX.Element => {
     }
   };
 
+  const changeAlgorithm = (algorithm: ALGORITHM) => {
+    if (!visualizing) {
+      setAlgorithm(algorithm);
+    }
+  };
+
   useEffect(() => {
     const kdf = ({ key }: { key: string }) => {
       if (key == 'w') {
@@ -286,7 +295,7 @@ const PathfindingVisualizer = (): JSX.Element => {
       <Header
         algorithm={algorithm}
         visualizing={visualizing}
-        onAlgorithmSelect={setAlgorithm}
+        onAlgorithmSelect={changeAlgorithm}
         onVisualize={calculateByVisualizeButton}
         onClear={clear}
         weightWall={weightWallToggle}
