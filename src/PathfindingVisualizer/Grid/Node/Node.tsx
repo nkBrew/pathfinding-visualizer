@@ -1,5 +1,5 @@
 import React from 'react';
-import './Node.scss';
+import '../../../styles/Node.scss';
 import classNames from 'classnames';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCat, faFish, faWeightHanging } from '@fortawesome/free-solid-svg-icons';

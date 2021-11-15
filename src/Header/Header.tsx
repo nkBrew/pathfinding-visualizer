@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import './Header.scss';
+import '../styles/Header.scss';
 import { ALGORITHM, ALGORITHM_FRIENDLY_NAMES } from '../Algorithms/algorithms';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCaretDown, faCaretUp } from '@fortawesome/free-solid-svg-icons';

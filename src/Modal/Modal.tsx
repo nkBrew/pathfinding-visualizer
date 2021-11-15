@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import './Modal.scss';
+import '../styles/Modal.scss';
 import ModalButton from './ModalButton/ModalButton';
 import PageContent from './Pages/PageContent';
 import { PagesArray } from './Pages/Pages';

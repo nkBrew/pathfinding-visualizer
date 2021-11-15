@@ -1,5 +1,5 @@
 import React from 'react';
-import './Grid.scss';
+import '../../styles/Grid.scss';
 
 export type GridProps = {
   children: React.ReactNode[];

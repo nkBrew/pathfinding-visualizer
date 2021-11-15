@@ -5,7 +5,7 @@ import Legend from '../Legend/Legend';
 import Modal from '../Modal/Modal';
 import Grid from './Grid/Grid';
 import Node, { NODECLASS, NodeType } from './Grid/Node/Node';
-import './PathfindingVisualizer.css';
+import '../styles/PathfindingVisualizer.scss';
 //in px is the size of the node + its border
 const numCol = ((window.innerWidth / 34) * 0.93) >> 0;
 const numRow = ((window.innerHeight / 34) * 0.9) >> 0;
