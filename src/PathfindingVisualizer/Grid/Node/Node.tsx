@@ -15,11 +15,9 @@ export enum NODECLASS {
 export type NodeType = {
   col: number;
   row: number;
-  isFinder: boolean;
-  isTarget: boolean;
   isVisited: boolean;
   isPath: boolean;
-  nodeClass?: NODECLASS;
+  nodeClass: NODECLASS;
 };
 
 export type NodeProps = {
@@ -37,8 +35,6 @@ const targetColor = 'rgb(89, 89, 89)';
 const Node = ({
   col,
   row,
-  isFinder,
-  isTarget,
   isPath,
   isVisited,
   pathOnScreen,
@@ -65,15 +61,15 @@ const Node = ({
             'node-visited-no-ani': isVisited && pathOnScreen,
             'node-path': isPath && !pathOnScreen,
             'node-path-no-ani': isPath && pathOnScreen,
-            'finder-target-touch': touchMoving && isFinder,
+            'finder-target-touch': touchMoving == nodeClass,
           })}
         />
-        {isFinder && (
+        {nodeClass == NODECLASS.FINDER && (
           <div className="node-icon">
             <FontAwesomeIcon icon={faCat} size="lg" color={finderColor} />
           </div>
         )}
-        {isTarget && (
+        {nodeClass == NODECLASS.TARGET && (
           <div className="node-icon">
             <FontAwesomeIcon icon={faFish} size="1x" transform={{ rotate: 20 }} color={targetColor} />
           </div>

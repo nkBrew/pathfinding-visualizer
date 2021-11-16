@@ -38,11 +38,11 @@ const PathfindingVisualizer = (): JSX.Element => {
       for (let c = 0; c < numCol; c++) {
         const isFinder = finderStartCol == c && finderStartRow == r;
         const isTarget = targetStartCol == c && targetStartRow == r;
+        const nodeClass = isFinder ? NODECLASS.FINDER : isTarget ? NODECLASS.TARGET : NODECLASS.NORMAL;
         const node: NodeType = {
           col: c,
           row: r,
-          isFinder: isFinder,
-          isTarget: isTarget,
+          nodeClass: nodeClass,
           isPath: false,
           isVisited: false,
         };
@@ -65,7 +65,7 @@ const PathfindingVisualizer = (): JSX.Element => {
       for (let col = 0; col < numCol; col++) {
         const node = { ...nodes[row][col] };
         if (clearWalls) {
-          node.nodeClass = undefined;
+          node.nodeClass = NODECLASS.NORMAL;
         }
         if (clearPath) {
           node.isPath = false;
@@ -96,18 +96,22 @@ const PathfindingVisualizer = (): JSX.Element => {
       ...nodeToChange,
       isVisited: false,
       isPath: false,
-      nodeClass: nodeToChange.nodeClass == weightWallToggle ? undefined : weightWallToggle,
+      nodeClass: nodeToChange.nodeClass == weightWallToggle ? NODECLASS.NORMAL : weightWallToggle,
     };
     newNodes[row][col] = updatedNode;
     setNodes(newNodes);
   };
 
   const mouseDownHandler = (col: number, row: number) => {
+    if (visualizing) {
+      return;
+    }
     setMouseDown(true);
     const n = nodes[row][col];
-    if (n.isFinder) {
+    if (n.nodeClass == NODECLASS.FINDER) {
+      console.log('fire');
       setMoving('finder');
-    } else if (n.isTarget) {
+    } else if (n.nodeClass == NODECLASS.TARGET) {
       setMoving('target');
     } else {
       setWeightOrWall(col, row);
@@ -115,12 +119,15 @@ const PathfindingVisualizer = (): JSX.Element => {
   };
 
   const mouseUpHandler = () => {
+    if (visualizing) {
+      return;
+    }
     setMouseDown(false);
     if (moving) setMoving('');
   };
 
   const touchEndHandler = (col: number, row: number, event: React.TouchEvent<HTMLDivElement>) => {
-    if (!event.cancelable) {
+    if (!event.cancelable || visualizing) {
       return;
     }
     event.preventDefault();
@@ -136,9 +143,9 @@ const PathfindingVisualizer = (): JSX.Element => {
         moveTarget(col, row);
         return;
       default:
-        if (n.isFinder) {
+        if (n.nodeClass == NODECLASS.FINDER) {
           setTouchMoving(NODECLASS.FINDER);
-        } else if (n.isTarget) {
+        } else if (n.nodeClass == NODECLASS.TARGET) {
           setTouchMoving(NODECLASS.TARGET);
         } else {
           setWeightOrWall(col, row);
@@ -148,11 +155,15 @@ const PathfindingVisualizer = (): JSX.Element => {
   };
 
   const mouseEnterHandler = (col: number, row: number) => {
+    if (visualizing) {
+      return;
+    }
     const n = nodes[row][col];
 
     if (n.nodeClass != NODECLASS.WALL) {
       switch (moving) {
         case 'finder':
+          console.log('fire2');
           moveFinder(col, row);
           break;
         case 'target':
@@ -162,15 +173,15 @@ const PathfindingVisualizer = (): JSX.Element => {
           break;
       }
     }
-    if (mouseDown && !moving && !n.isFinder && !n.isTarget) {
+    if (mouseDown && !moving && n.nodeClass != NODECLASS.FINDER && n.nodeClass != NODECLASS.TARGET) {
       setWeightOrWall(col, row);
     }
   };
 
   const moveTarget = (col: number, row: number) => {
     const newNodes = [...nodes];
-    const oldTarget = { ...nodes[target.row][target.col], isTarget: false };
-    const newTarget = { ...nodes[row][col], isTarget: true };
+    const oldTarget = { ...nodes[target.row][target.col], nodeClass: NODECLASS.NORMAL };
+    const newTarget = { ...nodes[row][col], nodeClass: NODECLASS.TARGET };
 
     newNodes[target.row][target.col] = oldTarget;
     newNodes[row][col] = newTarget;
@@ -185,8 +196,8 @@ const PathfindingVisualizer = (): JSX.Element => {
   const moveFinder = (col: number, row: number) => {
     const newNodes = [...nodes];
 
-    const oldFinder = { ...nodes[finder.row][finder.col], isFinder: false };
-    const newFinder = { ...nodes[row][col], isFinder: true };
+    const oldFinder = { ...nodes[finder.row][finder.col], nodeClass: NODECLASS.NORMAL };
+    const newFinder = { ...nodes[row][col], nodeClass: NODECLASS.FINDER };
 
     newNodes[finder.row][finder.col] = oldFinder;
     newNodes[row][col] = newFinder;
@@ -207,8 +218,6 @@ const PathfindingVisualizer = (): JSX.Element => {
             col={n.col}
             row={n.row}
             mouseEnterHandler={mouseEnterHandler}
-            isFinder={n.isFinder}
-            isTarget={n.isTarget}
             mouseDownHandler={mouseDownHandler}
             mouseUpHandler={mouseUpHandler}
             isPath={n.isPath}
