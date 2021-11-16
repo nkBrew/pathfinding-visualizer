@@ -109,7 +109,6 @@ const PathfindingVisualizer = (): JSX.Element => {
     setMouseDown(true);
     const n = nodes[row][col];
     if (n.nodeClass == NODECLASS.FINDER) {
-      console.log('fire');
       setMoving('finder');
     } else if (n.nodeClass == NODECLASS.TARGET) {
       setMoving('target');
@@ -163,7 +162,6 @@ const PathfindingVisualizer = (): JSX.Element => {
     if (n.nodeClass != NODECLASS.WALL) {
       switch (moving) {
         case 'finder':
-          console.log('fire2');
           moveFinder(col, row);
           break;
         case 'target':
