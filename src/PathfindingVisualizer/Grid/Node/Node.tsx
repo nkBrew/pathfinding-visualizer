@@ -9,6 +9,7 @@ export enum NODECLASS {
   WEIGHT = 'Weight',
   FINDER = 'FINDER',
   TARGET = 'TARGET',
+  NORMAL = 'NORMAL',
 }
 
 export type NodeType = {
@@ -23,9 +24,11 @@ export type NodeType = {
 
 export type NodeProps = {
   pathOnScreen: boolean;
+  touchMoving: NODECLASS.FINDER | NODECLASS.TARGET | null;
   mouseEnterHandler: (col: number, row: number) => void;
   mouseUpHandler: (col: number, row: number) => void;
   mouseDownHandler: (col: number, row: number) => void;
+  touchEndHandler: (col: number, row: number, event: React.TouchEvent<HTMLDivElement>) => void;
 } & NodeType;
 
 const finderColor = 'rgb(89, 89, 89)';
@@ -40,9 +43,11 @@ const Node = ({
   isVisited,
   pathOnScreen,
   nodeClass,
+  touchMoving,
   mouseEnterHandler,
   mouseDownHandler,
   mouseUpHandler,
+  touchEndHandler,
 }: NodeProps): JSX.Element => {
   return (
     <div
@@ -50,6 +55,7 @@ const Node = ({
       onMouseEnter={() => mouseEnterHandler(col, row)}
       onMouseDown={() => mouseDownHandler(col, row)}
       onMouseUp={() => mouseUpHandler(col, row)}
+      onTouchEnd={(e) => touchEndHandler(col, row, e)}
     >
       <div className="node-center-align">
         <div
@@ -59,6 +65,7 @@ const Node = ({
             'node-visited-no-ani': isVisited && pathOnScreen,
             'node-path': isPath && !pathOnScreen,
             'node-path-no-ani': isPath && pathOnScreen,
+            'finder-target-touch': touchMoving && isFinder,
           })}
         />
         {isFinder && (

@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { ALGORITHM, calculateByAlgorithm, ColRow } from '../Algorithms/algorithms';
 import Header from '../Header/Header';
 import Legend from '../Legend/Legend';
@@ -23,7 +23,7 @@ const PathfindingVisualizer = (): JSX.Element => {
   const [pathOnScreen, setPathOnScreen] = useState(false);
   const [algorithm, setAlgorithm] = useState(ALGORITHM.ASTAR);
   const [weightWallToggle, setWeightWallToggle] = useState<NODECLASS.WALL | NODECLASS.WEIGHT>(NODECLASS.WALL);
-  const gridRef = useRef(null);
+  const [touchMoving, setTouchMoving] = useState<NODECLASS.FINDER | NODECLASS.TARGET | null>(null);
 
   useEffect(() => {
     const nodeRows = [];
@@ -82,7 +82,6 @@ const PathfindingVisualizer = (): JSX.Element => {
   };
 
   const changeWeightWallToggle = () => {
-    console.log(weightWallToggle);
     if (weightWallToggle == NODECLASS.WEIGHT) {
       setWeightWallToggle(NODECLASS.WALL);
     } else {
@@ -111,7 +110,6 @@ const PathfindingVisualizer = (): JSX.Element => {
     } else if (n.isTarget) {
       setMoving('target');
     } else {
-      // setWall(col, row);
       setWeightOrWall(col, row);
     }
   };
@@ -121,44 +119,82 @@ const PathfindingVisualizer = (): JSX.Element => {
     if (moving) setMoving('');
   };
 
+  const touchEndHandler = (col: number, row: number, event: React.TouchEvent<HTMLDivElement>) => {
+    if (!event.cancelable) {
+      return;
+    }
+    event.preventDefault();
+    const n = nodes[row][col];
+
+    switch (touchMoving) {
+      case NODECLASS.FINDER:
+        setTouchMoving(null);
+        moveFinder(col, row);
+        return;
+      case NODECLASS.TARGET:
+        setTouchMoving(null);
+        moveTarget(col, row);
+        return;
+      default:
+        if (n.isFinder) {
+          setTouchMoving(NODECLASS.FINDER);
+        } else if (n.isTarget) {
+          setTouchMoving(NODECLASS.TARGET);
+        } else {
+          setWeightOrWall(col, row);
+        }
+        return;
+    }
+  };
+
   const mouseEnterHandler = (col: number, row: number) => {
     const n = nodes[row][col];
+
     if (n.nodeClass != NODECLASS.WALL) {
-      const newNodes = [...nodes];
       switch (moving) {
         case 'finder':
-          const oldFinder = { ...nodes[finder.row][finder.col], isFinder: false };
-          const newFinder = { ...nodes[row][col], isFinder: true };
-
-          newNodes[finder.row][finder.col] = oldFinder;
-          newNodes[row][col] = newFinder;
-          setNodes(nodes);
-          setFinder({ col: col, row: row });
-          if (pathOnScreen) {
-            clear(false, true, false);
-            calculate(row, col, target.row, target.col, false);
-          }
+          moveFinder(col, row);
           break;
         case 'target':
-          const oldTarget = { ...nodes[target.row][target.col], isTarget: false };
-          const newTarget = { ...nodes[row][col], isTarget: true };
-
-          newNodes[target.row][target.col] = oldTarget;
-          newNodes[row][col] = newTarget;
-          setNodes(nodes);
-          setTarget({ col: col, row: row });
-          if (pathOnScreen) {
-            clear(false, true, false);
-            calculate(finder.row, finder.col, row, col, false);
-          }
+          moveTarget(col, row);
           break;
         default:
           break;
       }
     }
     if (mouseDown && !moving && !n.isFinder && !n.isTarget) {
-      // setWall(col, row);
       setWeightOrWall(col, row);
+    }
+  };
+
+  const moveTarget = (col: number, row: number) => {
+    const newNodes = [...nodes];
+    const oldTarget = { ...nodes[target.row][target.col], isTarget: false };
+    const newTarget = { ...nodes[row][col], isTarget: true };
+
+    newNodes[target.row][target.col] = oldTarget;
+    newNodes[row][col] = newTarget;
+    setNodes(newNodes);
+    setTarget({ col: col, row: row });
+    if (pathOnScreen) {
+      clear(false, true, false);
+      calculate(finder.row, finder.col, row, col, false);
+    }
+  };
+
+  const moveFinder = (col: number, row: number) => {
+    const newNodes = [...nodes];
+
+    const oldFinder = { ...nodes[finder.row][finder.col], isFinder: false };
+    const newFinder = { ...nodes[row][col], isFinder: true };
+
+    newNodes[finder.row][finder.col] = oldFinder;
+    newNodes[row][col] = newFinder;
+    setNodes(newNodes);
+    setFinder({ col: col, row: row });
+    if (pathOnScreen) {
+      clear(false, true, false);
+      calculate(row, col, target.row, target.col, false);
     }
   };
 
@@ -179,6 +215,8 @@ const PathfindingVisualizer = (): JSX.Element => {
             isVisited={n.isVisited}
             pathOnScreen={pathOnScreen}
             nodeClass={n.nodeClass}
+            touchEndHandler={touchEndHandler}
+            touchMoving={touchMoving}
           />
         ))}
       </div>
@@ -210,7 +248,6 @@ const PathfindingVisualizer = (): JSX.Element => {
       if (shortestPath.length > 0) {
         visualizeShortestPath(exploredList.length, shortestPath, timeout);
       } else {
-        // setVisualizing(timeout);
         setTimeout(() => {
           setVisualizing(false);
           setPathOnScreen(true);
@@ -282,7 +319,6 @@ const PathfindingVisualizer = (): JSX.Element => {
   useEffect(() => {
     const kdf = ({ key }: { key: string }) => {
       if (key == 'w') {
-        console.log('hi');
         changeWeightWallToggle();
       }
     };
@@ -306,7 +342,7 @@ const PathfindingVisualizer = (): JSX.Element => {
       />
       <Legend />
       <div className="PathfindingVisualizer">
-        <div ref={gridRef}>
+        <div>
           <Grid>{renderNodes()}</Grid>
         </div>
       </div>
