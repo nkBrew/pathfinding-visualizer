@@ -1,7 +1,7 @@
 @import '/src/styles/Node.scss';
 
 .legend {
-  min-height:10vh;
+  min-height:14vh;
   background-color: rgb(241, 242, 243);
 }
 
@@ -20,9 +20,6 @@
       width:100%;
       display:flex;
       justify-content: center;
-      > div::after{
-        // content: ':'
-      }
     }
   }
 }
