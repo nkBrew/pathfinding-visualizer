@@ -66,18 +66,13 @@
 @media screen and (max-width: 760px){
   .modal-content {
     height:auto;
+    min-height:60vh;
   }
 
   .modal-buttons-container {
     position:relative;
   }
-  .modal-button {
-    // font-size: 15px;
+  img {
+    width:80%;
   }
 }
-
-// img {
-//   width:auto;
-//   height:100%;
- 
-// }

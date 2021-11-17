@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import '../styles/Modal.scss';
 import ModalButton from './ModalButton/ModalButton';
 import PageContent from './Pages/PageContent';
@@ -7,6 +7,7 @@ import { PagesArray } from './Pages/Pages';
 const Modal = (): JSX.Element => {
   const [open, setOpen] = useState(true);
   const [page, setPage] = useState(1);
+  const ref = useRef<HTMLDivElement>(null);
   const pageContent = PagesArray[page - 1];
 
   const closeModal = (e: React.MouseEvent<HTMLDivElement>) => {
@@ -25,8 +26,18 @@ const Modal = (): JSX.Element => {
     }
   };
 
+  useEffect(() => {
+    if (window.innerWidth < 760) {
+      console.log('fire');
+      window.scrollTo({ top: 0 });
+      if (ref != null && ref.current != null) {
+        ref.current.scrollTo(0, 0);
+      }
+    }
+  }, [page]);
+
   return (
-    <div id="modal" className="modal" onClick={closeModal} style={{ display: open ? 'block' : 'none' }}>
+    <div id="modal" ref={ref} className="modal" onClick={closeModal} style={{ display: open ? 'block' : 'none' }}>
       <div id="modal-content" className="modal-content">
         <p className="float-right">
           {page}/{PagesArray.length}
