@@ -1,17 +1,17 @@
 {
   "files": {
-    "main.css": "/pathfinding-visualizer/static/css/main.923566b8.chunk.css",
-    "main.js": "/pathfinding-visualizer/static/js/main.ff66edb5.chunk.js",
-    "main.js.map": "/pathfinding-visualizer/static/js/main.ff66edb5.chunk.js.map",
+    "main.css": "/pathfinding-visualizer/static/css/main.5477d33f.chunk.css",
+    "main.js": "/pathfinding-visualizer/static/js/main.1de17eb8.chunk.js",
+    "main.js.map": "/pathfinding-visualizer/static/js/main.1de17eb8.chunk.js.map",
     "runtime-main.js": "/pathfinding-visualizer/static/js/runtime-main.ebe0fb6a.js",
     "runtime-main.js.map": "/pathfinding-visualizer/static/js/runtime-main.ebe0fb6a.js.map",
-    "static/js/2.2daf8119.chunk.js": "/pathfinding-visualizer/static/js/2.2daf8119.chunk.js",
-    "static/js/2.2daf8119.chunk.js.map": "/pathfinding-visualizer/static/js/2.2daf8119.chunk.js.map",
+    "static/js/2.816186b4.chunk.js": "/pathfinding-visualizer/static/js/2.816186b4.chunk.js",
+    "static/js/2.816186b4.chunk.js.map": "/pathfinding-visualizer/static/js/2.816186b4.chunk.js.map",
     "static/js/3.69565b56.chunk.js": "/pathfinding-visualizer/static/js/3.69565b56.chunk.js",
     "static/js/3.69565b56.chunk.js.map": "/pathfinding-visualizer/static/js/3.69565b56.chunk.js.map",
     "index.html": "/pathfinding-visualizer/index.html",
-    "static/css/main.923566b8.chunk.css.map": "/pathfinding-visualizer/static/css/main.923566b8.chunk.css.map",
-    "static/js/2.2daf8119.chunk.js.LICENSE.txt": "/pathfinding-visualizer/static/js/2.2daf8119.chunk.js.LICENSE.txt",
+    "static/css/main.5477d33f.chunk.css.map": "/pathfinding-visualizer/static/css/main.5477d33f.chunk.css.map",
+    "static/js/2.816186b4.chunk.js.LICENSE.txt": "/pathfinding-visualizer/static/js/2.816186b4.chunk.js.LICENSE.txt",
     "static/media/algorithmAnimation.51b6fc2a.gif": "/pathfinding-visualizer/static/media/algorithmAnimation.51b6fc2a.gif",
     "static/media/dragFinderTarget.90f68543.gif": "/pathfinding-visualizer/static/media/dragFinderTarget.90f68543.gif",
     "static/media/toggleWallsWeights.443699c7.gif": "/pathfinding-visualizer/static/media/toggleWallsWeights.443699c7.gif",
@@ -19,8 +19,8 @@
   },
   "entrypoints": [
     "static/js/runtime-main.ebe0fb6a.js",
-    "static/js/2.2daf8119.chunk.js",
-    "static/css/main.923566b8.chunk.css",
-    "static/js/main.ff66edb5.chunk.js"
+    "static/js/2.816186b4.chunk.js",
+    "static/css/main.5477d33f.chunk.css",
+    "static/js/main.1de17eb8.chunk.js"
   ]
 }
