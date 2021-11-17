@@ -28,7 +28,6 @@ const Modal = (): JSX.Element => {
 
   useEffect(() => {
     if (window.innerWidth < 760) {
-      console.log('fire');
       window.scrollTo({ top: 0 });
       if (ref != null && ref.current != null) {
         ref.current.scrollTo(0, 0);
