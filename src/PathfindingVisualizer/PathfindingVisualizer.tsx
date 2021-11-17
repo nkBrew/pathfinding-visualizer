@@ -247,7 +247,7 @@ const PathfindingVisualizer = (): JSX.Element => {
 
     const exploredList = result[0];
     const shortestPath = result[1];
-    if (!pathOnScreen) {
+    if (timeout) {
       setVisualizing(true);
     }
     if (exploredList) {
@@ -347,7 +347,7 @@ const PathfindingVisualizer = (): JSX.Element => {
         weightWall={weightWallToggle}
         changeWeightWallToggle={changeWeightWallToggle}
       />
-      <Legend />
+      <Legend algorithm={algorithm} />
       <div className="PathfindingVisualizer">
         <div>
           <Grid>{renderNodes()}</Grid>

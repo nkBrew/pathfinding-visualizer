@@ -1,9 +1,52 @@
+import React from 'react';
 import { faCat, faFish, faWeightHanging } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import React from 'react';
 import '../styles/Legend.scss';
+import { ALGORITHM } from '../Algorithms/algorithms';
 
-const Legend = (): JSX.Element => {
+const ALGORITHM_LEGEND_DESCRIPTIONS = {
+  [ALGORITHM.DFS]: (
+    <p>
+      <i>
+        <b>Depth First Search</b> is <b>unweighted</b> and <b>DOES guarantee the shortest path</b>
+      </i>
+    </p>
+  ),
+  [ALGORITHM.BFS]: (
+    <p>
+      <i>
+        <b>Breadth First Search</b> is <b>unweighted</b> and <b>guarantees the shortest path</b>
+      </i>
+    </p>
+  ),
+  [ALGORITHM.DIJKSTRA]: (
+    <p>
+      <i>
+        <b>Dijkstra</b> is <b>weighted</b> and <b>guarantees the shortest path</b>
+      </i>
+    </p>
+  ),
+  [ALGORITHM.ASTAR]: (
+    <p>
+      <i>
+        <b>A* Star</b> is <b>weighted</b> and <b>guarantees the shortest path</b>
+      </i>
+    </p>
+  ),
+  [ALGORITHM.GREEDY]: (
+    <p>
+      <i>
+        <b>Greedy Search</b> is <b>weighted</b> and <b>does not guarantee the shortest path</b>
+      </i>
+    </p>
+  ),
+};
+
+type LegendProps = {
+  algorithm: ALGORITHM;
+};
+
+const Legend = ({ algorithm }: LegendProps): JSX.Element => {
   return (
     <div className="legend">
       <ul className="legend-flexbox-wrapper">
@@ -57,6 +100,9 @@ const Legend = (): JSX.Element => {
               <div className="legend-node-path-1" />
             </div>
           </div>
+        </li>
+        <li className="legend-algorithm-description">
+          <div>{ALGORITHM_LEGEND_DESCRIPTIONS[algorithm]}</div>
         </li>
       </ul>
     </div>

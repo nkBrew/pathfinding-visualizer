@@ -22,6 +22,10 @@
       justify-content: center;
     }
   }
+
+  .legend-algorithm-description{
+    flex:1 100%;
+  }
 }
 
 .legend-node {
@@ -37,6 +41,8 @@
   background-color: $node-wall-color;
   border:none;
 }
+
+
 
 .legend-node-visited {
   @extend .node-visited;
